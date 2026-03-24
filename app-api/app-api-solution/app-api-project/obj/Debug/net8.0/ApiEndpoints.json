@@ -1,0 +1,50 @@
+[
+  {
+    "ContainingType": "PanoramaBackend.Controllers.PanoramaLoginController",
+    "Method": "Login",
+    "RelativePath": "api/PanoramaLogin/login",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "PanoramaBackend.Controllers.PanoramaLoginController\u002BPanoramaLoginRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "PanoramaBackend.Controllers.PanoramaZoneCollectorController",
+    "Method": "GetDevices",
+    "RelativePath": "api/PanoramaZoneCollector/devices",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "PanoramaBackend.Controllers.PanoramaZoneCollectorController\u002BPanoramaDevicesRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "PanoramaBackend.Controllers.PanoramaZoneCollectorController",
+    "Method": "GetZoneByIp",
+    "RelativePath": "api/PanoramaZoneCollector/zone-by-ip",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "PanoramaBackend.Controllers.PanoramaZoneCollectorController\u002BZoneByIpRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  }
+]

@@ -1,0 +1,30 @@
+/* src/styles/PanoramaPage.css */
+
+.AppTitle {
+  margin-top: 30px;
+  text-align: center;
+  font-size: 60px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.panorama-page {
+  padding: 1.5rem;
+}
+
+/* Container for the token box */
+.panorama-page__token-box {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  border-radius: 8px;
+  background-color: #f4f4f4;
+  border: 1px solid #ccc;
+  word-break: break-all; /* helps with very long content */
+}
+
+/* Token text styling to prevent spillover */
+.panorama-page__token-text {
+  margin-top: 0.5rem;
+  white-space: pre-wrap;  /* allow wrapping */
+  word-break: break-all;  /* break long unbroken strings (like your token) */
+  overflow-x: auto;       /* if it’s still too long, add horizontal scroll */
+}
