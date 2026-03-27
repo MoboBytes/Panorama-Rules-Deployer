@@ -2,21 +2,20 @@
 Running this programing, Front-End using Visual Studio Code (Front-End) and Visual Studio 2022 (Backend) at the same time.
 Visual 2022 is responsible for the API calls. VS Code is responsible for web page/app interface.
 
-Overview:
+# Overview
 - React (Front End Library)
 - Typscript (Front End Language)
 - C# (Backend Language)
 
-**Instructions for Install:**
+# Instructions for Install
 
 **Install Node Version Manager**
 - Go install the .exe for the program from "https://github.com/coreybutler/nvm-windows/releases"
 
 **Open a command terminal**
-- Install a specific Node version: nvm install 20
-- Switch to a specific installed version: nvm use 20
-- Check current Node version: node -v 
-- We want Javascript [v20.19.4]
+- nvm install 20 //Install a specific Node version
+- nvm use 20 //Switch to a specific installed version 
+- node -v //Check current Node version. We want Javascript [v20.19.4]
 
 **Git Clone Repository in a folder**
 - git clone https://github.com/MoboBytes/Panorama-Rules-Deployer.git
@@ -61,9 +60,9 @@ Using Visual Studio 2022 (You should be able to use any version I believe)
 **Accessing the App**
 - While both Swagger Page (Back-End) and Web-App (Front-End) are open
 Login with your credentials
-- Host (Being an IP address or host website used to access Paloalto Networks Dashboard)
-- User Name
-- Password
+1) Host (Being an IP address or host website used to access Paloalto Networks Dashboard)
+2) User Name
+3) Password
 
 
 
