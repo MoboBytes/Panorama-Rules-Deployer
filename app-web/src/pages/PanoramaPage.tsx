@@ -1,25 +1,29 @@
-// src/pages/PanoramaPage.tsx
-
-import { useState } from "react";
-import { Button } from "@mui/material";
+import { useEffect, useState } from "react";
+import { Button, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { IPChart } from "../components/IPChart";
 import "../styles/PanoramaPage.css";
-import { getZoneByIp } from "../services/PanoramaZoneControllerClient";
-import type { ZoneByIpResult } from "../services/PanoramaZoneControllerClient";
+import {
+  buildPanoramaCache,
+  clearPanoramaCache,
+  getPanoramaCacheStatus,
+  getZoneByIp,
+} from "../services/PanoramaZoneControllerClient";
+import type {
+  PanoramaCacheStatus,
+  ZoneByIpResult,
+} from "../services/PanoramaZoneControllerClient";
 
 type ChartDetails = {
   firewallHostname: string;
   firewallSerialNumber: string;
   zone: string;
-  deviceGroup: string;
 };
 
 const emptyDetails: ChartDetails = {
   firewallHostname: "",
   firewallSerialNumber: "",
   zone: "",
-  deviceGroup: "",
 };
 
 export default function PanoramaPage() {
@@ -31,17 +35,87 @@ export default function PanoramaPage() {
   const [destIp, setDestIp] = useState("");
   const [destDetails, setDestDetails] = useState<ChartDetails>(emptyDetails);
 
-  const [loading, setLoading] = useState(false);
+  const [lookupLoading, setLookupLoading] = useState(false);
+  const [cacheLoading, setCacheLoading] = useState(false);
 
-  const handleLookup = async () => {
-    setLoading(true);
+  const [hasCache, setHasCache] = useState(false);
+  const [cacheStatusMessage, setCacheStatusMessage] = useState(
+    "No data collected yet."
+  );
+
+  const loadCacheStatus = async () => {
+    try {
+      const status: PanoramaCacheStatus = await getPanoramaCacheStatus();
+
+      setHasCache(status.hasMetadataCache);
+
+      if (status.isCacheBuilding) {
+        setCacheStatusMessage("Collecting Panorama device, VR, and zone-interface data...");
+        return;
+      }
+
+      if (!status.hasValidSession) {
+        setCacheStatusMessage("No Panorama session found. Please log in first.");
+        return;
+      }
+
+      if (status.lastError) {
+        setCacheStatusMessage(`Cache error: ${status.lastError}`);
+        return;
+      }
+
+      if (status.hasMetadataCache) {
+        setCacheStatusMessage(
+          `Data ready. ${status.totalDevices} devices, ${status.totalVirtualRouters} VRs, ${status.totalInterfaceZoneMappings} interface-zone mappings loaded.`
+        );
+      } else {
+        setCacheStatusMessage("No data collected yet.");
+      }
+    } catch (error) {
+      setCacheStatusMessage(
+        error instanceof Error ? error.message : "Failed to get cache status."
+      );
+    }
+  };
+
+  useEffect(() => {
+    loadCacheStatus();
+  }, []);
+
+  const handleCacheAction = async () => {
+    setCacheLoading(true);
 
     try {
-      // Clear previous results
+      if (hasCache) {
+        const result = await clearPanoramaCache();
+        setHasCache(false);
+        setCacheStatusMessage(result.message || "Cache cleared.");
+      } else {
+        setCacheStatusMessage("Collecting Panorama device, VR, and zone-interface data...");
+        const result = await buildPanoramaCache();
+        setHasCache(true);
+        setCacheStatusMessage(
+          result.message ||
+            `Data ready. ${result.totalDevices} devices, ${result.totalVirtualRouters} VRs, ${result.totalInterfaceZoneMappings} interface-zone mappings loaded.`
+        );
+      }
+    } catch (error) {
+      setCacheStatusMessage(
+        error instanceof Error ? error.message : "Cache action failed."
+      );
+    } finally {
+      setCacheLoading(false);
+      await loadCacheStatus();
+    }
+  };
+
+  const handleLookup = async () => {
+    setLookupLoading(true);
+
+    try {
       setSourceDetails(emptyDetails);
       setDestDetails(emptyDetails);
 
-      // Source IP lookup (if provided)
       const sIp = sourceIp.trim();
       if (sIp) {
         try {
@@ -50,14 +124,12 @@ export default function PanoramaPage() {
             firewallHostname: result.deviceHostname,
             firewallSerialNumber: result.deviceSerial,
             zone: result.zone,
-            deviceGroup: "", // backend doesn’t provide this yet
           });
         } catch {
-          // You can optionally surface an error in UI
+          setSourceDetails(emptyDetails);
         }
       }
 
-      // Destination IP lookup (if provided)
       const dIp = destIp.trim();
       if (dIp) {
         try {
@@ -66,14 +138,13 @@ export default function PanoramaPage() {
             firewallHostname: result.deviceHostname,
             firewallSerialNumber: result.deviceSerial,
             zone: result.zone,
-            deviceGroup: "",
           });
         } catch {
-          // Optional: surface error
+          setDestDetails(emptyDetails);
         }
       }
     } finally {
-      setLoading(false);
+      setLookupLoading(false);
     }
   };
 
@@ -81,10 +152,41 @@ export default function PanoramaPage() {
     <div className="appTitle">
       <h1 className="AppTitle">Panorama IP Zone Mapper</h1>
 
+      {/* Cache Button + Status Text */}
       <Box
         sx={{
           display: "flex",
-          flexDirection: "row", // two columns: label | right side
+          justifyContent: "center",
+          alignItems: "center",
+          gap: 3,
+          mt: 4,
+          mb: 4,
+          flexWrap: "wrap",
+        }}
+      >
+        <Button
+          variant="outlined"
+          color={hasCache ? "error" : "primary"}
+          onClick={handleCacheAction}
+          disabled={cacheLoading}
+        >
+          {cacheLoading ? "Collecting..." : hasCache ? "Clear Data" : "Collect Data"}
+        </Button>
+
+        <Box
+          sx={{
+            minWidth: "320px",
+            maxWidth: "700px",
+          }}
+        >
+          <Typography variant="body2">{cacheStatusMessage}</Typography>
+        </Box>
+      </Box>
+
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
           alignItems: "center",
           justifyContent: "center",
           gap: 8,
@@ -106,7 +208,6 @@ export default function PanoramaPage() {
             firewallHostname={sourceDetails.firewallHostname}
             firewallSerialNumber={sourceDetails.firewallSerialNumber}
             zone={sourceDetails.zone}
-            deviceGroup={sourceDetails.deviceGroup}
           />
         </Box>
 
@@ -124,7 +225,6 @@ export default function PanoramaPage() {
             firewallHostname={destDetails.firewallHostname}
             firewallSerialNumber={destDetails.firewallSerialNumber}
             zone={destDetails.zone}
-            deviceGroup={destDetails.deviceGroup}
           />
         </Box>
       </Box>
@@ -139,9 +239,9 @@ export default function PanoramaPage() {
         <Button
           variant="outlined"
           onClick={handleLookup}
-          disabled={loading}
+          disabled={lookupLoading || cacheLoading || !hasCache}
         >
-          {loading ? "Looking up..." : "Lookup Zones"}
+          {lookupLoading ? "Looking up..." : "Lookup Zones"}
         </Button>
       </Box>
     </div>

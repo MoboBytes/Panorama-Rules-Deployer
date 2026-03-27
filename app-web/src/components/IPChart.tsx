@@ -9,11 +9,10 @@ type IPChartProps = {
   firewallHostname: string;
   firewallSerialNumber: string;
   zone: string;
-  deviceGroup: string;
 };
 
 export const IPChart: React.FC<IPChartProps> = ({ 
-  onIpChange, IPAddress,ChartTitle, firewallHostname, firewallSerialNumber, zone, deviceGroup }) => {
+  onIpChange, IPAddress,ChartTitle, firewallHostname, firewallSerialNumber, zone }) => {
   
   return (
     <Box
@@ -114,7 +113,6 @@ export const IPChart: React.FC<IPChartProps> = ({
             { label: 'Firewall Hostname:', value: firewallHostname },
             { label: 'Firewall Serial Number:', value: firewallSerialNumber },
             { label: 'Zone:', value: zone },
-            { label: 'Device Group:', value: deviceGroup },
           ].map(({ label, value }) => (
             <Box key={label}>
               <Typography variant="subtitle1" sx={{ mb: 0.5 }}>
