@@ -1,7 +1,4 @@
 
-Running this programing, Front-End using Visual Studio Code (Front-End) and Visual Studio 2022 (Backend) at the same time.
-Visual 2022 is responsible for the API calls. VS Code is responsible for web page/app interface.
-
 # Overview
 - React (Front End Library)
 - Typscript (Front End Language)
@@ -35,7 +32,7 @@ Visual 2022 is responsible for the API calls. VS Code is responsible for web pag
   - press h + enter to show help
 
 **Installing the Back-End**
-Using Visual Studio 2022 (You should be able to use any version I believe)
+- Using Visual Studio 2022 (You should be able to use any version I believe)
   - The "Workloads/Packs" on the installer required will be 
 1) ASP.NET and Web Development
 2) Node.js Development
@@ -58,8 +55,7 @@ Using Visual Studio 2022 (You should be able to use any version I believe)
 - Click "Run https" button, filed green array at the top. Should boot Swagger (API Tester) to verify the back-end is working
 
 **Accessing the App**
-- While both Swagger Page (Back-End) and Web-App (Front-End) are open
-Login with your credentials
+- While both Swagger Page (Back-End) and Web-App (Front-End) are open, then login with your credentials
 1) Host (Being an IP address or host website used to access Paloalto Networks Dashboard)
 2) User Name
 3) Password
