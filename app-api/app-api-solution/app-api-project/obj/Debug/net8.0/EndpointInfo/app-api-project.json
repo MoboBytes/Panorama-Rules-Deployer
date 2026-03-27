@@ -5,6 +5,85 @@
     "version": "1.0"
   },
   "paths": {
+    "/api/PanoramaCache/build": {
+      "post": {
+        "tags": [
+          "PanoramaCache"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/PanoramaCache/status": {
+      "get": {
+        "tags": [
+          "PanoramaCache"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/PanoramaCache/clear": {
+      "post": {
+        "tags": [
+          "PanoramaCache"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/PanoramaCache/devices": {
+      "get": {
+        "tags": [
+          "PanoramaCache"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/PanoramaIPtoZone/zone-by-ip": {
+      "post": {
+        "tags": [
+          "PanoramaIPtoZone"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ZoneByIpRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ZoneByIpRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ZoneByIpRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/PanoramaLogin/login": {
       "post": {
         "tags": [
@@ -35,76 +114,10 @@
           }
         }
       }
-    },
-    "/api/PanoramaZoneCollector/devices": {
-      "post": {
-        "tags": [
-          "PanoramaZoneCollector"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PanoramaDevicesRequest"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PanoramaDevicesRequest"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/PanoramaDevicesRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/PanoramaZoneCollector/zone-by-ip": {
-      "post": {
-        "tags": [
-          "PanoramaZoneCollector"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ZoneByIpRequest"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ZoneByIpRequest"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/ZoneByIpRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
     }
   },
   "components": {
     "schemas": {
-      "PanoramaDevicesRequest": {
-        "type": "object",
-        "additionalProperties": false
-      },
       "PanoramaLoginRequest": {
         "type": "object",
         "properties": {
