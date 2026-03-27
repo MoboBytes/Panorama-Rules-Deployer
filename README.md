@@ -13,11 +13,11 @@ Overview:
 Go install the .exe for the program from "https://github.com/coreybutler/nvm-windows/releases"
 
 2) **Open a command terminal**
-# Install a specific Node version
+Install a specific Node version
 nvm install 20
-# Switch to a specific installed version
+Switch to a specific installed version
 nvm use 20
-# Check current Node version
+Check current Node version
 node -v 
 //We want Javascript [v20.19.4]
 
