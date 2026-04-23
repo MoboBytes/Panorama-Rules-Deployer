@@ -1,30 +1,304 @@
 /* src/styles/PanoramaPage.css */
 
-.AppTitle {
-  margin-top: 30px;
-  text-align: center;
-  font-size: 60px;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+:root {
+  --page-bg: linear-gradient(180deg, #f8fbff 0%, #f4f7fc 100%);
+  --card-bg: rgba(255, 255, 255, 0.92);
+  --border: #dbe4f0;
+  --text-main: #142033;
+  --text-muted: #607089;
+  --accent: #4f7cff;
+  --accent-dark: #2f5fe6;
+  --accent-soft: #e8efff;
+  --shadow-soft: 0 8px 24px rgba(40, 72, 120, 0.07);
+  --shadow-card: 0 12px 30px rgba(41, 72, 152, 0.07);
+  --radius-xl: 20px;
+  --radius-lg: 16px;
+  --radius-md: 12px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  background: var(--page-bg);
+  color: var(--text-main);
 }
 
 .panorama-page {
-  padding: 1.5rem;
+  min-height: 100vh;
+  background: var(--page-bg);
+  padding: 30px 20px 42px;
 }
 
-/* Container for the token box */
+.panorama-shell {
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.panorama-hero {
+  text-align: center;
+  margin-bottom: 22px;
+}
+
+.panorama-hero__eyebrow {
+  margin: 0 0 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.panorama-hero__title {
+  margin: 0;
+  font-size: clamp(2rem, 3.2vw, 3.1rem);
+  line-height: 1.08;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.panorama-hero__subtitle {
+  max-width: 680px;
+  margin: 10px auto 0;
+  font-size: 0.96rem;
+  line-height: 1.55;
+  color: var(--text-muted);
+}
+
+.panorama-steps {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin: 24px 0 24px;
+}
+
+.panorama-step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  box-shadow: var(--shadow-soft);
+}
+
+.panorama-step--active {
+  background: var(--accent-soft);
+  border-color: #c9d8ff;
+  color: var(--accent-dark);
+}
+
+.panorama-step__number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  background: #ffffff;
+  border: 1px solid #d5def2;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.panorama-step--active .panorama-step__number {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #ffffff;
+}
+
+.panorama-step__label {
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.panorama-status-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 18px;
+  background: var(--card-bg);
+  border: 1px solid rgba(219, 228, 240, 0.85);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-card);
+  backdrop-filter: blur(8px);
+  margin-bottom: 26px;
+  flex-wrap: wrap;
+}
+
+.panorama-status-card__left {
+  display: flex;
+  align-items: center;
+}
+
+.panorama-status-card__right {
+  flex: 1;
+  min-width: 240px;
+}
+
+.panorama-status-text {
+  margin: 0 !important;
+  color: var(--text-muted);
+  font-size: 0.9rem !important;
+  line-height: 1.45 !important;
+ 
+}
+
+.panorama-primary-btn.MuiButton-root,
+.panorama-lookup-btn.MuiButton-root {
+  text-transform: none;
+  border-radius: 12px;
+  padding: 10px 18px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  box-shadow: none;
+}
+
+.panorama-primary-btn.MuiButton-root {
+  background: linear-gradient(135deg, var(--accent) 0%, #6a8dff 100%);
+}
+
+.panorama-primary-btn.MuiButton-root:hover {
+  background: linear-gradient(135deg, var(--accent-dark) 0%, var(--accent) 100%);
+}
+
+.panorama-chart-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(280px, 1fr));
+  gap: 22px;
+  align-items: stretch;
+}
+
+.panorama-chart-card {
+  background: var(--card-bg);
+  border: 1px solid rgba(219, 228, 240, 0.9);
+  border-radius: 22px;
+  padding: 20px 18px;
+  box-shadow: var(--shadow-card);
+  backdrop-filter: blur(8px);
+  min-height: 100%;
+}
+
+/* Helps if IPChart renders MUI text fields/cards inside */
+.panorama-chart-card .MuiTypography-root {
+  color: var(--text-main);
+}
+
+.panorama-chart-card .MuiOutlinedInput-root {
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.panorama-chart-card .MuiOutlinedInput-notchedOutline {
+  border-color: #d8e1ee;
+}
+
+.panorama-chart-card .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: #b9c8e0;
+}
+
+.panorama-chart-card .Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: var(--accent) !important;
+  border-width: 2px !important;
+}
+
+.panorama-chart-card .MuiInputLabel-root.Mui-focused {
+  color: var(--accent);
+}
+
+.panorama-lookup-action {
+  display: flex;
+  justify-content: center;
+  margin-top: 26px;
+}
+
+.panorama-lookup-btn.MuiButton-root {
+  min-width: 200px;
+  padding: 12px 24px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #547dff 0%, #6f91ff 100%);
+  font-size: 0.95rem;
+}
+
+.panorama-lookup-btn.MuiButton-root:hover {
+  background: linear-gradient(135deg, #3d68f5 0%, #5d82ff 100%);
+}
+
+.panorama-lookup-btn.Mui-disabled {
+  background: #dbe5f5 !important;
+  color: #7f8ea8 !important;
+}
+
+/* Old title class kept harmless in case referenced elsewhere */
+.AppTitle {
+  margin: 0;
+  text-align: center;
+  font-size: 48px;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+}
+
+/* Legacy classes retained */
 .panorama-page__token-box {
   margin-bottom: 1.5rem;
   padding: 1rem;
   border-radius: 8px;
   background-color: #f4f4f4;
   border: 1px solid #ccc;
-  word-break: break-all; /* helps with very long content */
+  word-break: break-all;
 }
 
-/* Token text styling to prevent spillover */
 .panorama-page__token-text {
   margin-top: 0.5rem;
-  white-space: pre-wrap;  /* allow wrapping */
-  word-break: break-all;  /* break long unbroken strings (like your token) */
-  overflow-x: auto;       /* if it’s still too long, add horizontal scroll */
+  white-space: pre-wrap;
+  word-break: break-all;
+  overflow-x: auto;
 }
+
+@media (max-width: 980px) {
+  .panorama-chart-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .panorama-status-card {
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 640px) {
+  .panorama-page {
+    padding: 22px 14px 32px;
+  }
+
+  .panorama-hero__title {
+    font-size: 1.9rem;
+  }
+
+  .panorama-hero__subtitle {
+    font-size: 0.9rem;
+  }
+
+  .panorama-status-card {
+    padding: 14px;
+    border-radius: 18px;
+  }
+
+  .panorama-chart-card {
+    padding: 16px 14px;
+    border-radius: 18px;
+  }
+
+  .panorama-lookup-btn.MuiButton-root {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+

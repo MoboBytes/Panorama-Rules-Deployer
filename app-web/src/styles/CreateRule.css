@@ -1,0 +1,27 @@
+
+.AppTitle {
+  margin-top: 80px;
+  text-align: center;
+  font-size:40px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.IPSubtitle {
+  margin: 0;
+  padding: 12px 0 12px 16px;
+  background-color: #ffffff;
+  color: #111111;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+   margin-left: 30px;
+}
+
+.AnswerBoxes {
+  margin-left: 50px;
+}
+
+.RadioButtons {
+  font-size: 20px;
+}

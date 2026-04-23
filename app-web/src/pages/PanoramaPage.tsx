@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button, Typography } from "@mui/material";
-import { Box } from "@mui/system";
 import { IPChart } from "../components/IPChart";
+import "../styles/IPChart.css";
 import "../styles/PanoramaPage.css";
 import {
   buildPanoramaCache,
@@ -27,11 +27,9 @@ const emptyDetails: ChartDetails = {
 };
 
 export default function PanoramaPage() {
-  // Source IP + details
   const [sourceIp, setSourceIp] = useState("");
   const [sourceDetails, setSourceDetails] = useState<ChartDetails>(emptyDetails);
 
-  // Destination IP + details
   const [destIp, setDestIp] = useState("");
   const [destDetails, setDestDetails] = useState<ChartDetails>(emptyDetails);
 
@@ -50,7 +48,9 @@ export default function PanoramaPage() {
       setHasCache(status.hasMetadataCache);
 
       if (status.isCacheBuilding) {
-        setCacheStatusMessage("Collecting Panorama device, VR, and zone-interface data...");
+        setCacheStatusMessage(
+          "Collecting Panorama device, VR, and zone-interface data..."
+        );
         return;
       }
 
@@ -91,7 +91,9 @@ export default function PanoramaPage() {
         setHasCache(false);
         setCacheStatusMessage(result.message || "Cache cleared.");
       } else {
-        setCacheStatusMessage("Collecting Panorama device, VR, and zone-interface data...");
+        setCacheStatusMessage(
+          "Collecting Panorama device, VR, and zone-interface data..."
+        );
         const result = await buildPanoramaCache();
         setHasCache(true);
         setCacheStatusMessage(
@@ -149,101 +151,75 @@ export default function PanoramaPage() {
   };
 
   return (
-    <div className="appTitle">
-      <h1 className="AppTitle">Panorama IP Zone Mapper</h1>
+    <div className="panorama-page">
+      <div className="panorama-shell">
+        <header className="panorama-hero">
+          <p className="panorama-hero__eyebrow">Network Discovery</p>
+          <h1 className="panorama-hero__title">Panorama IP Zone Mapper</h1>
+          <p className="panorama-hero__subtitle">
+            Map source and destination IP addresses to firewall zones using
+            Panorama metadata.
+          </p>
+        </header>
 
-      {/* Cache Button + Status Text */}
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          gap: 3,
-          mt: 4,
-          mb: 4,
-          flexWrap: "wrap",
-        }}
-      >
-        <Button
-          variant="outlined"
-          color={hasCache ? "error" : "primary"}
-          onClick={handleCacheAction}
-          disabled={cacheLoading}
-        >
-          {cacheLoading ? "Collecting..." : hasCache ? "Clear Data" : "Collect Data"}
-        </Button>
+        <section className="panorama-status-card">
+          <div className="panorama-status-card__left">
+            <Button
+              variant="contained"
+              onClick={handleCacheAction}
+              disabled={cacheLoading}
+              className="panorama-primary-btn"
+            >
+              {cacheLoading
+                ? "Collecting..."
+                : hasCache
+                ? "Clear Data"
+                : "Collect Data"}
+            </Button>
+          </div>
 
-        <Box
-          sx={{
-            minWidth: "320px",
-            maxWidth: "700px",
-          }}
-        >
-          <Typography variant="body2">{cacheStatusMessage}</Typography>
-        </Box>
-      </Box>
+          <div className="panorama-status-card__right">
+            <Typography className="panorama-status-text">
+              {cacheStatusMessage}
+            </Typography>
+          </div>
+        </section>
 
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: 8,
-          width: "100%",
-          ml: -4,
-        }}
-      >
-        {/* Source IP */}
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
-          <IPChart
-            onIpChange={setSourceIp}
-            IPAddress={sourceIp}
-            ChartTitle="Source IP:"
-            firewallHostname={sourceDetails.firewallHostname}
-            firewallSerialNumber={sourceDetails.firewallSerialNumber}
-            zone={sourceDetails.zone}
-          />
-        </Box>
+        <section className="panorama-chart-grid">
+          <div className="panorama-chart-card">
+            <IPChart
+              onIpChange={setSourceIp}
+              IPAddress={sourceIp}
+              ChartTitle="Source IP:"
+              firewallHostname={sourceDetails.firewallHostname}
+              firewallSerialNumber={sourceDetails.firewallSerialNumber}
+              zone={sourceDetails.zone}
+            />
+          </div>
 
-        {/* Destination IP */}
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
-          <IPChart
-            onIpChange={setDestIp}
-            IPAddress={destIp}
-            ChartTitle="Destination IP:"
-            firewallHostname={destDetails.firewallHostname}
-            firewallSerialNumber={destDetails.firewallSerialNumber}
-            zone={destDetails.zone}
-          />
-        </Box>
-      </Box>
+          <div className="panorama-chart-card">
+            <IPChart
+              onIpChange={setDestIp}
+              IPAddress={destIp}
+              ChartTitle="Destination IP:"
+              firewallHostname={destDetails.firewallHostname}
+              firewallSerialNumber={destDetails.firewallSerialNumber}
+              zone={destDetails.zone}
+            />
+          </div>
+        </section>
 
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          mt: 4,
-        }}
-      >
-        <Button
-          variant="outlined"
-          onClick={handleLookup}
-          disabled={lookupLoading || cacheLoading || !hasCache}
-        >
-          {lookupLoading ? "Looking up..." : "Lookup Zones"}
-        </Button>
-      </Box>
+        <div className="panorama-lookup-action">
+          <Button
+            variant="contained"
+            onClick={handleLookup}
+            disabled={lookupLoading || cacheLoading || !hasCache}
+            className="panorama-lookup-btn"
+          >
+            {lookupLoading ? "Looking up..." : "Lookup Zones"}
+          </Button>
+        </div>
+      </div>
     </div>
   );
 }

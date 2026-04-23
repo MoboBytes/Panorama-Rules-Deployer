@@ -2,6 +2,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import PanoramaPage from "./pages/PanoramaPage";
+import CreateRule from "./pages/CreateRule";
 
 function App() {
   return (
@@ -11,6 +12,9 @@ function App() {
 
       {/* Panorama page */}
       <Route path="/panorama" element={<PanoramaPage />} />
+
+      {/* Panorama page */}
+      <Route path="/CreateRule" element={<CreateRule />} />
 
       {/* Fallback: any unknown route redirects to login */}
       <Route path="*" element={<Navigate to="/" replace />} />

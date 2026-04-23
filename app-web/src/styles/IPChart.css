@@ -1,0 +1,76 @@
+/* IPChart styling */
+
+.ipchart {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.ipchart__header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.ipchart__title {
+  font-size: 1.1rem !important;
+  font-weight: 700 !important;
+  color: var(--text-main) !important;
+  line-height: 1.2 !important;
+}
+
+.ipchart__input-wrap {
+  width: 100%;
+}
+
+.ipchart__input .MuiOutlinedInput-root {
+  height: 52px;
+  border-radius: 14px;
+  background: #ffffff;
+  font-size: 0.95rem;
+}
+
+.ipchart__input .MuiOutlinedInput-notchedOutline {
+  border-color: #d8e1ee;
+}
+
+.ipchart__input .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: #bfd0eb;
+}
+
+.ipchart__input .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: var(--accent);
+  border-width: 2px;
+}
+
+.ipchart__input .MuiInputLabel-root {
+  color: #70819b;
+  font-size: 0.92rem;
+}
+
+.ipchart__input .MuiInputLabel-root.Mui-focused {
+  color: var(--accent);
+}
+
+.ipchart__details {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ipchart__detail-card {
+  padding: 11px 11px 10px;
+  border: 1px solid #e1e8f3;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #ffffff 0%, #f9fbff 100%);
+}
+
+.ipchart__icon {
+  margin-right: 10px;
+  color: var(--accent);
+  font-size: 20px !important;
+}
+
+
+
