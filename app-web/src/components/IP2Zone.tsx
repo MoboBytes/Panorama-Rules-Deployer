@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Button, Typography } from "@mui/material";
-import { IPChart } from "../components/IPChart";
+import { IPChart } from "./IPChart";
 import "../styles/IPChart.css";
 import "../styles/PanoramaPage.css";
 import {
@@ -26,7 +26,7 @@ const emptyDetails: ChartDetails = {
   zone: "",
 };
 
-export default function PanoramaPage() {
+export default function IP2Zone() {
   const [sourceIp, setSourceIp] = useState("");
   const [sourceDetails, setSourceDetails] = useState<ChartDetails>(emptyDetails);
 

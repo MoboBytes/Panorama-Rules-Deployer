@@ -1,7 +1,6 @@
 // src/App.tsx
 import { Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
-import PanoramaPage from "./pages/PanoramaPage";
 import CreateRule from "./pages/CreateRule";
 
 function App() {
@@ -9,9 +8,6 @@ function App() {
     <Routes>
       {/* Login page at root */}
       <Route path="/" element={<LoginPage />} />
-
-      {/* Panorama page */}
-      <Route path="/panorama" element={<PanoramaPage />} />
 
       {/* Panorama page */}
       <Route path="/CreateRule" element={<CreateRule />} />
