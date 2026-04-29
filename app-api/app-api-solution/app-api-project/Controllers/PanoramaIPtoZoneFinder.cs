@@ -41,6 +41,7 @@ namespace PanoramaBackend.Controllers
             public string DeviceSerial { get; set; } = string.Empty;
             public string DeviceHostname { get; set; } = string.Empty;
             public string DeviceIpAddress { get; set; } = string.Empty;
+            public string DeviceGroup { get; set; } = string.Empty;
             public string VirtualRouter { get; set; } = string.Empty;
             public string EgressInterface { get; set; } = string.Empty;
             public string Zone { get; set; } = string.Empty;
@@ -50,10 +51,11 @@ namespace PanoramaBackend.Controllers
 
         /// <summary>
         /// Given an IP behind a firewall, finds which firewall, virtual router,
-        /// egress interface, and zone would be used to reach it.
+        /// egress interface, zone, and device group would be used to reach it.
         ///
         /// Uses cached:
         /// - devices
+        /// - device groups
         /// - VRs
         /// - interface -> zone mappings
         ///
@@ -137,7 +139,7 @@ namespace PanoramaBackend.Controllers
         /// For a given cached device, tries each cached VR and resolves:
         /// IP -> fib-lookup -> interface -> cached zone
         ///
-        /// Zones inside, outside, and internet are skipped.
+        /// Zones inside, outside, extranet-firewall, and internet are skipped.
         /// Returns the first valid non-generic zone found, else null.
         /// </summary>
         private async Task<ZoneByIpResult?> TryResolveOnDeviceAsync(
@@ -173,6 +175,7 @@ namespace PanoramaBackend.Controllers
                     DeviceSerial = device.Serial,
                     DeviceHostname = device.Hostname,
                     DeviceIpAddress = device.IpAddress,
+                    DeviceGroup = device.DeviceGroup,
                     VirtualRouter = vr,
                     EgressInterface = iface,
                     Zone = zone

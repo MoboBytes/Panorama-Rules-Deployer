@@ -18,12 +18,14 @@ type ChartDetails = {
   firewallHostname: string;
   firewallSerialNumber: string;
   zone: string;
+  firewallGroup: string;
 };
 
 const emptyDetails: ChartDetails = {
   firewallHostname: "",
   firewallSerialNumber: "",
   zone: "",
+  firewallGroup: "",
 };
 
 export default function IP2Zone() {
@@ -49,7 +51,7 @@ export default function IP2Zone() {
 
       if (status.isCacheBuilding) {
         setCacheStatusMessage(
-          "Collecting Panorama device, VR, and zone-interface data..."
+          "Collecting Panorama device, device-group, VR, and zone-interface data..."
         );
         return;
       }
@@ -66,7 +68,7 @@ export default function IP2Zone() {
 
       if (status.hasMetadataCache) {
         setCacheStatusMessage(
-          `Data ready. ${status.totalDevices} devices, ${status.totalVirtualRouters} VRs, ${status.totalInterfaceZoneMappings} interface-zone mappings loaded.`
+          `Data ready. ${status.totalDevices} devices, ${status.totalDevicesWithDeviceGroup} with device groups, ${status.totalVirtualRouters} VRs, ${status.totalInterfaceZoneMappings} interface-zone mappings loaded.`
         );
       } else {
         setCacheStatusMessage("No data collected yet.");
@@ -92,13 +94,13 @@ export default function IP2Zone() {
         setCacheStatusMessage(result.message || "Cache cleared.");
       } else {
         setCacheStatusMessage(
-          "Collecting Panorama device, VR, and zone-interface data..."
+          "Collecting Panorama device, device-group, VR, and zone-interface data..."
         );
         const result = await buildPanoramaCache();
         setHasCache(true);
         setCacheStatusMessage(
           result.message ||
-            `Data ready. ${result.totalDevices} devices, ${result.totalVirtualRouters} VRs, ${result.totalInterfaceZoneMappings} interface-zone mappings loaded.`
+            `Data ready. ${result.totalDevices} devices, ${result.totalDevicesWithDeviceGroup} with device groups, ${result.totalVirtualRouters} VRs, ${result.totalInterfaceZoneMappings} interface-zone mappings loaded.`
         );
       }
     } catch (error) {
@@ -126,6 +128,7 @@ export default function IP2Zone() {
             firewallHostname: result.deviceHostname,
             firewallSerialNumber: result.deviceSerial,
             zone: result.zone,
+            firewallGroup: result.deviceGroup,
           });
         } catch {
           setSourceDetails(emptyDetails);
@@ -140,6 +143,7 @@ export default function IP2Zone() {
             firewallHostname: result.deviceHostname,
             firewallSerialNumber: result.deviceSerial,
             zone: result.zone,
+            firewallGroup: result.deviceGroup,
           });
         } catch {
           setDestDetails(emptyDetails);
@@ -194,6 +198,7 @@ export default function IP2Zone() {
               firewallHostname={sourceDetails.firewallHostname}
               firewallSerialNumber={sourceDetails.firewallSerialNumber}
               zone={sourceDetails.zone}
+              firewallGroup={sourceDetails.firewallGroup}
             />
           </div>
 
@@ -205,6 +210,7 @@ export default function IP2Zone() {
               firewallHostname={destDetails.firewallHostname}
               firewallSerialNumber={destDetails.firewallSerialNumber}
               zone={destDetails.zone}
+              firewallGroup={destDetails.firewallGroup}
             />
           </div>
         </section>

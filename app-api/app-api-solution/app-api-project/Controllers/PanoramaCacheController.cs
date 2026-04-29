@@ -35,6 +35,7 @@ namespace PanoramaBackend.Controllers
         /// <summary>
         /// Builds in-memory Panorama metadata cache:
         /// - Devices
+        /// - Device group per device
         /// - Virtual routers per device
         /// - Full interface-to-zone mapping per device
         /// </summary>
@@ -67,6 +68,9 @@ namespace PanoramaBackend.Controllers
                     return NotFound("No devices were returned from Panorama.");
                 }
 
+                // Step 2: Get all device groups once and flatten to serial -> device group
+                var serialToDeviceGroup = await FetchDeviceGroupMappingsAsync(host, apiKey);
+
                 var semaphore = new SemaphoreSlim(MaxParallelDevices);
 
                 var tasks = devices.Select(async device =>
@@ -96,6 +100,7 @@ namespace PanoramaBackend.Controllers
                             Hostname = device.Hostname,
                             IpAddress = device.IpAddress,
                             Connected = device.Connected,
+                            DeviceGroup = serialToDeviceGroup.TryGetValue(device.Serial, out var dg) ? dg : string.Empty,
                             VirtualRouters = vrs,
                             InterfaceToZone = interfaceToZone
                         };
@@ -110,6 +115,7 @@ namespace PanoramaBackend.Controllers
                             Hostname = device.Hostname,
                             IpAddress = device.IpAddress,
                             Connected = device.Connected,
+                            DeviceGroup = serialToDeviceGroup.TryGetValue(device.Serial, out var dg) ? dg : string.Empty,
                             VirtualRouters = new List<string> { "VR1" },
                             InterfaceToZone = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
                         };
@@ -131,6 +137,7 @@ namespace PanoramaBackend.Controllers
                     builtAtUtc = _sessionCache.CacheBuiltAtUtc,
                     totalDevices = cachedDevices.Count,
                     connectedDevices = cachedDevices.Count(d => d.Connected),
+                    totalDevicesWithDeviceGroup = cachedDevices.Count(d => !string.IsNullOrWhiteSpace(d.DeviceGroup)),
                     totalVirtualRouters = cachedDevices.Sum(d => d.VirtualRouters.Count),
                     totalInterfaceZoneMappings = cachedDevices.Sum(d => d.InterfaceToZone.Count)
                 });
@@ -163,6 +170,7 @@ namespace PanoramaBackend.Controllers
                 lastError = _sessionCache.CacheBuildError,
                 totalDevices = cachedDevices.Count,
                 connectedDevices = cachedDevices.Count(d => d.Connected),
+                totalDevicesWithDeviceGroup = cachedDevices.Count(d => !string.IsNullOrWhiteSpace(d.DeviceGroup)),
                 totalVirtualRouters = cachedDevices.Sum(d => d.VirtualRouters.Count),
                 totalInterfaceZoneMappings = cachedDevices.Sum(d => d.InterfaceToZone.Count)
             });
@@ -184,7 +192,7 @@ namespace PanoramaBackend.Controllers
         }
 
         /// <summary>
-        /// Returns the currently cached devices with VR and interface/zone metadata.
+        /// Returns the currently cached devices with device group, VR, and interface/zone metadata.
         /// Helpful for debugging.
         /// </summary>
         [HttpGet("devices")]
@@ -261,6 +269,73 @@ namespace PanoramaBackend.Controllers
         }
 
         /// <summary>
+        /// Calls Panorama to get all device groups and returns:
+        /// serial -> device group
+        /// </summary>
+        private async Task<Dictionary<string, string>> FetchDeviceGroupMappingsAsync(string host, string apiKey)
+        {
+            if (string.IsNullOrWhiteSpace(host) || string.IsNullOrWhiteSpace(apiKey))
+                throw new ArgumentException("Host and ApiKey are required.");
+
+            var baseUri = host.EndsWith("/")
+                ? host[..^1]
+                : host;
+
+            var cmdXml = "<show><devicegroups></devicegroups></show>";
+
+            var query = HttpUtility.ParseQueryString(string.Empty);
+            query["type"] = "op";
+            query["cmd"] = cmdXml;
+            query["key"] = apiKey;
+
+            var uriBuilder = new UriBuilder(new Uri(new Uri(baseUri), "/api/"))
+            {
+                Query = query.ToString()
+            };
+
+            var client = _httpClientFactory.CreateClient();
+            var response = await client.GetAsync(uriBuilder.Uri);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var body = await response.Content.ReadAsStringAsync();
+                throw new Exception($"Panorama error while fetching device groups: {body}");
+            }
+
+            var rawXml = await response.Content.ReadAsStringAsync();
+            var doc = XDocument.Parse(rawXml);
+
+            var serialToDeviceGroup = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+            var deviceGroupEntries = doc.Descendants("devicegroups").Elements("entry");
+
+            foreach (var dgEntry in deviceGroupEntries)
+            {
+                var deviceGroupName = (string?)dgEntry.Attribute("name");
+                if (string.IsNullOrWhiteSpace(deviceGroupName))
+                    continue;
+
+                var deviceEntries = dgEntry.Element("devices")?.Elements("entry")
+                    ?? Enumerable.Empty<XElement>();
+
+                foreach (var deviceEntry in deviceEntries)
+                {
+                    var serial =
+                        ((string?)deviceEntry.Element("serial"))?.Trim()
+                        ?? ((string?)deviceEntry.Attribute("name"))?.Trim()
+                        ?? string.Empty;
+
+                    if (string.IsNullOrWhiteSpace(serial))
+                        continue;
+
+                    serialToDeviceGroup[serial] = deviceGroupName;
+                }
+            }
+
+            return serialToDeviceGroup;
+        }
+
+        /// <summary>
         /// Gets all virtual router names for a given device via `show routing summary`.
         /// </summary>
         private async Task<List<string>> GetVirtualRoutersAsync(string host, string apiKey, string deviceSerial)
@@ -304,7 +379,7 @@ namespace PanoramaBackend.Controllers
         /// <summary>
         /// Gets all zone entries for a device and builds:
         /// interface name -> zone name
-        /// 
+        ///
         /// This avoids doing one config call per interface later.
         /// </summary>
         private async Task<Dictionary<string, string>> GetAllInterfaceZonesAsync(

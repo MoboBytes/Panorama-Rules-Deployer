@@ -1,7 +1,15 @@
-import { Box, Divider, List, ListItem, ListItemText, TextField, Typography } from "@mui/material";
-import DnsIcon from '@mui/icons-material/Dns';
-import LanIcon from '@mui/icons-material/Lan';
-import TagIcon from '@mui/icons-material/Tag';
+import {
+  Box,
+  Divider,
+  List,
+  ListItem,
+  ListItemText,
+  TextField,
+  Typography,
+} from "@mui/material";
+import DnsIcon from "@mui/icons-material/Dns";
+import LanIcon from "@mui/icons-material/Lan";
+import TagIcon from "@mui/icons-material/Tag";
 
 type IPChartProps = {
   onIpChange: (value: string) => void;
@@ -10,6 +18,7 @@ type IPChartProps = {
   firewallHostname: string;
   firewallSerialNumber: string;
   zone: string;
+  firewallGroup: string;
 };
 
 export const IPChart: React.FC<IPChartProps> = ({
@@ -19,9 +28,8 @@ export const IPChart: React.FC<IPChartProps> = ({
   firewallHostname,
   firewallSerialNumber,
   zone,
+  firewallGroup,
 }) => {
- 
-
   return (
     <Box className="ipchart">
       <Box className="ipchart__header">
@@ -40,33 +48,39 @@ export const IPChart: React.FC<IPChartProps> = ({
       </Box>
 
       <Box className="ipchart__details">
-          <Box  className="ipchart__detail-card">
-            <List aria-label="mailbox folders">
-              <ListItem>
-                <DnsIcon className="ipchart__icon" />
-                <ListItemText primary="Firewall Name:" />
-                <Typography>
-                  {firewallHostname}
-                </Typography>
-              </ListItem>
-              <Divider component="li" />
-              <ListItem>
-                <TagIcon className="ipchart__icon" />
-                <ListItemText primary="Firewall Serial:" />
-                <Typography>
-                  {firewallSerialNumber}
-                </Typography>
-              </ListItem>
-              <Divider component="li" />
-              <ListItem>
-                <LanIcon className="ipchart__icon" />
-                <ListItemText primary="Zone:" />
-                <Typography>
-                  {zone}
-                </Typography>
-              </ListItem>
-            </List>
-          </Box>
+        <Box className="ipchart__detail-card">
+          <List aria-label="Panorama lookup details">
+            <ListItem>
+              <DnsIcon className="ipchart__icon" />
+              <ListItemText primary="Firewall Name:" />
+              <Typography>{firewallHostname}</Typography>
+            </ListItem>
+
+            <Divider component="li" />
+
+            <ListItem>
+              <TagIcon className="ipchart__icon" />
+              <ListItemText primary="Firewall Serial:" />
+              <Typography>{firewallSerialNumber}</Typography>
+            </ListItem>
+
+            <Divider component="li" />
+
+            <ListItem>
+              <TagIcon className="ipchart__icon" />
+              <ListItemText primary="Firewall Group:" />
+              <Typography>{firewallGroup}</Typography>
+            </ListItem>
+
+            <Divider component="li" />
+
+            <ListItem>
+              <LanIcon className="ipchart__icon" />
+              <ListItemText primary="Zone:" />
+              <Typography>{zone}</Typography>
+            </ListItem>
+          </List>
+        </Box>
       </Box>
     </Box>
   );
