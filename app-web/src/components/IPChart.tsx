@@ -1,156 +1,87 @@
-import { Box, TextField, Typography } from '@mui/material';
+import {
+  Box,
+  Divider,
+  List,
+  ListItem,
+  ListItemText,
+  TextField,
+  Typography,
+} from "@mui/material";
+import DnsIcon from "@mui/icons-material/Dns";
+import LanIcon from "@mui/icons-material/Lan";
+import TagIcon from "@mui/icons-material/Tag";
 
 type IPChartProps = {
-  //Inputs
   onIpChange: (value: string) => void;
   ChartTitle: string;
-  //Outputs
   IPAddress: string;
   firewallHostname: string;
   firewallSerialNumber: string;
   zone: string;
+  firewallGroup: string;
 };
 
-export const IPChart: React.FC<IPChartProps> = ({ 
-  onIpChange, IPAddress,ChartTitle, firewallHostname, firewallSerialNumber, zone }) => {
-  
+export const IPChart: React.FC<IPChartProps> = ({
+  onIpChange,
+  IPAddress,
+  ChartTitle,
+  firewallHostname,
+  firewallSerialNumber,
+  zone,
+  firewallGroup,
+}) => {
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'row',   // two columns: label | right side
-        alignItems: 'flex-start',
-        gap: 2,
-      }}
-    >
-      {/* Left column: label */}
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          height: 75, // roughly match the input box height
-        }}
-      >
-        <Typography variant="h6">{ChartTitle}</Typography>
+    <Box className="ipchart">
+      <Box className="ipchart__header">
+        <Typography className="ipchart__title">{ChartTitle}</Typography>
       </Box>
 
-      {/* Right column: IP input box on top, details box below */}
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 3,       // space between input box and details box
-        }}
-      >
-        {/* Top: IP input box (unchanged styling) */}
-        <Box
-          component="form"
-          sx={{
-            width: 275,
-            height: 75,
-            borderRadius: 5,
-            bgcolor: '#cccccc',
-            '&:hover': {
-              bgcolor: '#a5d6a7',
-            },
-          }}
-          noValidate
-          autoComplete="off"
-        >
-          <TextField
-            id="outlined-helperText"
-            label="IPv4 Address"
-            onChange = {(e) => onIpChange(e.target.value)}
-            value={IPAddress}
-            sx={{
-              width: '90%',
-              margin: '10px',
-              bgcolor: 'white',
-              borderRadius: 1,
+      <Box className="ipchart__input-wrap">
+        <TextField
+          fullWidth
+          label="IPv4 Address"
+          value={IPAddress}
+          onChange={(e) => onIpChange(e.target.value)}
+          variant="outlined"
+          className="ipchart__input"
+        />
+      </Box>
 
-              // Label styles
-              '& .MuiInputLabel-root': {
-                bgcolor: 'white',
-                px: 0.5,
-              },
-              '& .MuiInputLabel-shrink': {
-                bgcolor: 'white',
-                color: 'grey',
-                px: 0.5,
-                borderRadius: 1,
-                border: '1px solid #cccccc',
-              },
+      <Box className="ipchart__details">
+        <Box className="ipchart__detail-card">
+          <List aria-label="Panorama lookup details">
+            <ListItem>
+              <DnsIcon className="ipchart__icon" />
+              <ListItemText primary="Firewall Name:" />
+              <Typography>{firewallHostname}</Typography>
+            </ListItem>
 
-              // Border styles
-              '& .MuiOutlinedInput-root': {
-                '& fieldset': {
-                  borderColor: '#cccccc',
-                },
-                '&:hover fieldset': {
-                  borderColor: '#cccccc',
-                },
-                '&.Mui-focused fieldset': {
-                  borderColor: '#cccccc',
-                },
-              },
-            }}
-          />
-        </Box>
+            <Divider component="li" />
 
-        {/* Bottom: gray details box, perfectly aligned with input box */}
-        <Box
-          sx={{
-            width: 250,          // same width as input box
-            borderRadius: 5,
-            bgcolor: '#cccccc',
-            p: 1.5,
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 1.5,
-          }}
-        >
-          {[
-            { label: 'Firewall Hostname:', value: firewallHostname },
-            { label: 'Firewall Serial Number:', value: firewallSerialNumber },
-            { label: 'Zone:', value: zone },
-          ].map(({ label, value }) => (
-            <Box key={label}>
-              <Typography variant="subtitle1" sx={{ mb: 0.5 }}>
-                {label}
-              </Typography>
-              <Box
-                sx={{
-                  width: '90%',
-                  minHeight: 36,
-                  maxHeight: 72,
-                  borderRadius: 1,
-                  bgcolor: 'white',
-                  border: '1px solid #cccccc',
-                  display: 'flex',
-                  alignItems: 'flex-start',
-                  px: 1,
-                  py: 0.5,
-                  mx: 'auto',            // center within gray box
+            <ListItem>
+              <TagIcon className="ipchart__icon" />
+              <ListItemText primary="Firewall Serial:" />
+              <Typography>{firewallSerialNumber}</Typography>
+            </ListItem>
 
-                  // vertical scrolling
-                  overflowY: 'auto',
-                  overflowX: 'hidden',
-                  whiteSpace: 'normal',
-                  wordBreak: 'break-word',
-                }}
-              >
-                <Typography
-                  variant="body2"
-                  sx={{ color: value ? 'black' : 'grey.700' }}
-                >
-                  {value || ''}
-                </Typography>
-              </Box>
-            </Box>
-          ))}
+            <Divider component="li" />
+
+            <ListItem>
+              <TagIcon className="ipchart__icon" />
+              <ListItemText primary="Firewall Group:" />
+              <Typography>{firewallGroup}</Typography>
+            </ListItem>
+
+            <Divider component="li" />
+
+            <ListItem>
+              <LanIcon className="ipchart__icon" />
+              <ListItemText primary="Zone:" />
+              <Typography>{zone}</Typography>
+            </ListItem>
+          </List>
         </Box>
       </Box>
     </Box>
-    
   );
 };

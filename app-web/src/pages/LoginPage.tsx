@@ -28,7 +28,7 @@ export default function LoginPage() {
       console.log("Bearer token (cleaned):", bearerToken);
 
       // Navigate to Panorama page on success
-      navigate("/panorama");
+      navigate("/CreateRule");
     } catch (err: any) {
       console.error(err);
       setError(err.message ?? "Login failed");

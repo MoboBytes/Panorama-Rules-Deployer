@@ -5,12 +5,14 @@ export type PanoramaDeviceInfo = {
   hostname: string;
   ipAddress: string;
   connected: boolean;
+  deviceGroup: string;
 };
 
 export type ZoneByIpResult = {
   deviceSerial: string;
   deviceHostname: string;
   deviceIpAddress: string;
+  deviceGroup: string;
   virtualRouter: string;
   egressInterface: string;
   zone: string;
@@ -24,6 +26,7 @@ export type PanoramaCacheStatus = {
   lastError?: string | null;
   totalDevices: number;
   connectedDevices: number;
+  totalDevicesWithDeviceGroup: number;
   totalVirtualRouters: number;
   totalInterfaceZoneMappings: number;
 };
@@ -34,6 +37,7 @@ export type PanoramaCacheBuildResult = {
   builtAtUtc?: string | null;
   totalDevices: number;
   connectedDevices: number;
+  totalDevicesWithDeviceGroup: number;
   totalVirtualRouters: number;
   totalInterfaceZoneMappings: number;
 };

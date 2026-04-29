@@ -120,6 +120,8 @@ namespace PanoramaBackend.Services
         public string IpAddress { get; set; } = string.Empty;
         public bool Connected { get; set; }
 
+        public string DeviceGroup { get; set; } = string.Empty;
+
         // Usually VR1, but keep as a list for flexibility
         public List<string> VirtualRouters { get; set; } = new();
 
