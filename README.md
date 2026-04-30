@@ -32,7 +32,7 @@
   - press h + enter to show help
 
 **Installing the Back-End**
-- Using Visual Studio 2022 (You should be able to use any version I believe)
+- Using Visual Studio 2026 (You should be able to use any version I believe)
   - The "Workloads/Packs" on the installer required will be 
 1) ASP.NET and Web Development
 2) Node.js Development
