@@ -43,7 +43,7 @@
 
 **Opening the Back-End**
 - Time to make the API calls work!
-- After starting Visual Studio 2022, click "Open Project/Solution"
+- After starting Visual Studio 2026, click "Open Project/Solution"
 - Navigate to app-api within Panorama-Rules-Deployer project folder
 - Click on "app-solution" folder -> "app-solution.sln" sln being the project file.
 
