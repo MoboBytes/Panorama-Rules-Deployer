@@ -5,6 +5,37 @@
     "version": "1.0"
   },
   "paths": {
+    "/api/CreateTags/all": {
+      "post": {
+        "tags": [
+          "CreateTags"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetTagsRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetTagsRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetTagsRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/PanoramaCache/build": {
       "post": {
         "tags": [
@@ -118,6 +149,16 @@
   },
   "components": {
     "schemas": {
+      "GetTagsRequest": {
+        "type": "object",
+        "properties": {
+          "deviceGroup": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "PanoramaLoginRequest": {
         "type": "object",
         "properties": {

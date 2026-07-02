@@ -7,16 +7,8 @@
       "RelativeMoniker": "D:0:0:{49AA7812-4484-4D4C-9493-9F289D6F0A21}|app-api-project\\app-api-project.csproj|solutionrelative:app-api-project\\models\\panoramaprerulefields.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{49AA7812-4484-4D4C-9493-9F289D6F0A21}|app-api-project\\app-api-project.csproj|c:\\users\\jesqueda\\documents\\code\\paronama_rules\\app-api\\app-api-solution\\app-api-project\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{49AA7812-4484-4D4C-9493-9F289D6F0A21}|app-api-project\\app-api-project.csproj|solutionrelative:app-api-project\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{49AA7812-4484-4D4C-9493-9F289D6F0A21}|app-api-project\\app-api-project.csproj|c:\\users\\jesqueda\\documents\\code\\paronama_rules\\app-api\\app-api-solution\\app-api-project\\app-api-project.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
-      "RelativeMoniker": "D:0:0:{49AA7812-4484-4D4C-9493-9F289D6F0A21}|app-api-project\\app-api-project.csproj|solutionrelative:app-api-project\\app-api-project.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{49AA7812-4484-4D4C-9493-9F289D6F0A21}|app-api-project\\app-api-project.csproj|c:\\users\\jesqueda\\documents\\code\\paronama_rules\\app-api\\app-api-solution\\app-api-project\\controllers\\panoramaiptozonefinder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{49AA7812-4484-4D4C-9493-9F289D6F0A21}|app-api-project\\app-api-project.csproj|solutionrelative:app-api-project\\controllers\\panoramaiptozonefinder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{49AA7812-4484-4D4C-9493-9F289D6F0A21}|app-api-project\\app-api-project.csproj|c:\\users\\jesqueda\\documents\\code\\paronama_rules\\app-api\\app-api-solution\\app-api-project\\controllers\\createtagscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{49AA7812-4484-4D4C-9493-9F289D6F0A21}|app-api-project\\app-api-project.csproj|solutionrelative:app-api-project\\controllers\\createtagscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{49AA7812-4484-4D4C-9493-9F289D6F0A21}|app-api-project\\app-api-project.csproj|c:\\users\\jesqueda\\documents\\code\\paronama_rules\\app-api\\app-api-solution\\app-api-project\\controllers\\panoramacachecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -25,6 +17,18 @@
     {
       "AbsoluteMoniker": "D:0:0:{49AA7812-4484-4D4C-9493-9F289D6F0A21}|app-api-project\\app-api-project.csproj|c:\\users\\jesqueda\\documents\\code\\paronama_rules\\app-api\\app-api-solution\\app-api-project\\classes\\class.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{49AA7812-4484-4D4C-9493-9F289D6F0A21}|app-api-project\\app-api-project.csproj|solutionrelative:app-api-project\\classes\\class.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{49AA7812-4484-4D4C-9493-9F289D6F0A21}|app-api-project\\app-api-project.csproj|c:\\users\\jesqueda\\documents\\code\\paronama_rules\\app-api\\app-api-solution\\app-api-project\\controllers\\panoramaiptozonefinder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{49AA7812-4484-4D4C-9493-9F289D6F0A21}|app-api-project\\app-api-project.csproj|solutionrelative:app-api-project\\controllers\\panoramaiptozonefinder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{49AA7812-4484-4D4C-9493-9F289D6F0A21}|app-api-project\\app-api-project.csproj|c:\\users\\jesqueda\\documents\\code\\paronama_rules\\app-api\\app-api-solution\\app-api-project\\app-api-project.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{49AA7812-4484-4D4C-9493-9F289D6F0A21}|app-api-project\\app-api-project.csproj|solutionrelative:app-api-project\\app-api-project.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{49AA7812-4484-4D4C-9493-9F289D6F0A21}|app-api-project\\app-api-project.csproj|c:\\users\\jesqueda\\documents\\code\\paronama_rules\\app-api\\app-api-solution\\app-api-project\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{49AA7812-4484-4D4C-9493-9F289D6F0A21}|app-api-project\\app-api-project.csproj|solutionrelative:app-api-project\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -34,8 +38,21 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "CreateTagsController.cs",
+              "DocumentMoniker": "C:\\Users\\JESQUEDA\\Documents\\Code\\paronama_rules\\app-api\\app-api-solution\\app-api-project\\Controllers\\CreateTagsController.cs",
+              "RelativeDocumentMoniker": "app-api-project\\Controllers\\CreateTagsController.cs",
+              "ToolTip": "C:\\Users\\JESQUEDA\\Documents\\Code\\paronama_rules\\app-api\\app-api-solution\\app-api-project\\Controllers\\CreateTagsController.cs",
+              "RelativeToolTip": "app-api-project\\Controllers\\CreateTagsController.cs",
+              "ViewState": "AgIAAA4AAAAAAAAAAAAxwA8AAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-01T18:10:14.641Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
@@ -44,14 +61,14 @@
               "RelativeDocumentMoniker": "app-api-project\\Models\\PanoramaPreRuleFields.cs",
               "ToolTip": "C:\\Users\\JESQUEDA\\Documents\\Code\\paronama_rules\\app-api\\app-api-solution\\app-api-project\\Models\\PanoramaPreRuleFields.cs",
               "RelativeToolTip": "app-api-project\\Models\\PanoramaPreRuleFields.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAA8AAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-05-20T16:25:54.781Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 5,
               "Title": "app-api-project.csproj",
               "DocumentMoniker": "C:\\Users\\JESQUEDA\\Documents\\Code\\paronama_rules\\app-api\\app-api-solution\\app-api-project\\app-api-project.csproj",
               "RelativeDocumentMoniker": "app-api-project\\app-api-project.csproj",
@@ -63,19 +80,19 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 3,
               "Title": "Class.cs",
               "DocumentMoniker": "C:\\Users\\JESQUEDA\\Documents\\Code\\paronama_rules\\app-api\\app-api-solution\\app-api-project\\Classes\\Class.cs",
               "RelativeDocumentMoniker": "app-api-project\\Classes\\Class.cs",
               "ToolTip": "C:\\Users\\JESQUEDA\\Documents\\Code\\paronama_rules\\app-api\\app-api-solution\\app-api-project\\Classes\\Class.cs",
               "RelativeToolTip": "app-api-project\\Classes\\Class.cs",
-              "ViewState": "AgIAAFgAAAAAAAAAAAAQwIMAAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAIMAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-04-29T19:56:52.808Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "PanoramaIPtoZoneFinder.cs",
               "DocumentMoniker": "C:\\Users\\JESQUEDA\\Documents\\Code\\paronama_rules\\app-api\\app-api-solution\\app-api-project\\Controllers\\PanoramaIPtoZoneFinder.cs",
               "RelativeDocumentMoniker": "app-api-project\\Controllers\\PanoramaIPtoZoneFinder.cs",
@@ -87,19 +104,19 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 2,
               "Title": "PanoramaCacheController.cs",
               "DocumentMoniker": "C:\\Users\\JESQUEDA\\Documents\\Code\\paronama_rules\\app-api\\app-api-solution\\app-api-project\\Controllers\\PanoramaCacheController.cs",
               "RelativeDocumentMoniker": "app-api-project\\Controllers\\PanoramaCacheController.cs",
               "ToolTip": "C:\\Users\\JESQUEDA\\Documents\\Code\\paronama_rules\\app-api\\app-api-solution\\app-api-project\\Controllers\\PanoramaCacheController.cs",
               "RelativeToolTip": "app-api-project\\Controllers\\PanoramaCacheController.cs",
-              "ViewState": "AgIAAJMBAAAAAAAAAAAIwMEBAAABAAAAAAAAAA==",
+              "ViewState": "AgIAALMBAAAAAAAAAAAswMEBAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-04-29T19:51:46.639Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 6,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\JESQUEDA\\Documents\\Code\\paronama_rules\\app-api\\app-api-solution\\app-api-project\\Program.cs",
               "RelativeDocumentMoniker": "app-api-project\\Program.cs",

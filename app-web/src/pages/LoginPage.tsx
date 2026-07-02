@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginToPanorama } from "../services/PanoramaLoginClient";
-import "../styles/LoginPage.css";
+import "../styles/pages/LoginPage.css";
 
 export default function LoginPage() {
   const [host, setHost] = useState("");

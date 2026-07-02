@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Button, Typography } from "@mui/material";
 import { IPChart } from "./IPChart";
-import "../styles/IPChart.css";
-import "../styles/PanoramaPage.css";
+import "../styles/components/IPChart.css";
+import "../styles/components/IP2Zone.css";
 import {
   buildPanoramaCache,
   clearPanoramaCache,
@@ -21,6 +21,10 @@ type ChartDetails = {
   firewallGroup: string;
 };
 
+type IP2ZoneProps = {
+  onLookupComplete?: (deviceGroups: string[]) => void;
+};
+
 const emptyDetails: ChartDetails = {
   firewallHostname: "",
   firewallSerialNumber: "",
@@ -28,7 +32,7 @@ const emptyDetails: ChartDetails = {
   firewallGroup: "",
 };
 
-export default function IP2Zone() {
+export default function IP2Zone({ onLookupComplete }: IP2ZoneProps) {
   const [sourceIp, setSourceIp] = useState("");
   const [sourceDetails, setSourceDetails] = useState<ChartDetails>(emptyDetails);
 
@@ -119,11 +123,16 @@ export default function IP2Zone() {
     try {
       setSourceDetails(emptyDetails);
       setDestDetails(emptyDetails);
+      onLookupComplete?.([]);
+
+      let resolvedSourceGroup = "";
+      let resolvedDestGroup = "";
 
       const sIp = sourceIp.trim();
       if (sIp) {
         try {
           const result: ZoneByIpResult = await getZoneByIp(sIp);
+          resolvedSourceGroup = result.deviceGroup;
           setSourceDetails({
             firewallHostname: result.deviceHostname,
             firewallSerialNumber: result.deviceSerial,
@@ -139,6 +148,7 @@ export default function IP2Zone() {
       if (dIp) {
         try {
           const result: ZoneByIpResult = await getZoneByIp(dIp);
+          resolvedDestGroup = result.deviceGroup;
           setDestDetails({
             firewallHostname: result.deviceHostname,
             firewallSerialNumber: result.deviceSerial,
@@ -149,6 +159,12 @@ export default function IP2Zone() {
           setDestDetails(emptyDetails);
         }
       }
+
+      const groups = Array.from(
+        new Set([resolvedSourceGroup, resolvedDestGroup].filter(Boolean))
+      );
+
+      onLookupComplete?.(groups);
     } finally {
       setLookupLoading(false);
     }

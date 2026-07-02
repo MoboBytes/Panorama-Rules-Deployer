@@ -1,5 +1,21 @@
 [
   {
+    "ContainingType": "PanoramaBackend.Controllers.CreateTagsController",
+    "Method": "GetAllTags",
+    "RelativePath": "api/CreateTags/all",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "PanoramaBackend.Controllers.CreateTagsController\u002BGetTagsRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "PanoramaBackend.Controllers.PanoramaCacheController",
     "Method": "BuildCache",
     "RelativePath": "api/PanoramaCache/build",

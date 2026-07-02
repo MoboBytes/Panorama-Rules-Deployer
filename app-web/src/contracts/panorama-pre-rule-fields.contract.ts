@@ -1,5 +1,6 @@
 export interface IPanoramaPreRuleFields {
     RuleName: string;
+    TicketNumber: string;   
     ProfileSetting: string;
     To: string;
     From: string;
