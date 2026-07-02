@@ -13,6 +13,9 @@ import "../styles/pages/CreateRule.css";
 import "../styles/components/IP2Zone.css";
 import IP2Zone from "../components/IP2Zone";
 import MultipleSelectCheckmarks from "../components/MultipleSelectCheckmarks";
+import { getAllPanoramaTags } from "../services/PanoramaCreateRule";
+import type { PanoramaTagEntry } from "../services/PanoramaCreateRule";
+import SingleSelectTag from "../components/SingleSelectCheckmarks";
 
 export default function CreateARule() {
   const [trafficMode, setTrafficMode] = useState("automatic");
@@ -23,21 +26,53 @@ export default function CreateARule() {
   const [deviceGroups, setDeviceGroups] = useState<string[]>([]);
   const [selectedDeviceGroup, setSelectedDeviceGroup] = useState("");
 
-  const handleDeviceGroupChange = (event: SelectChangeEvent) => {
-    setSelectedDeviceGroup(event.target.value);
+  const [tags, setTags] = useState<PanoramaTagEntry[]>([]);
+  const [tagsLoading, setTagsLoading] = useState(false);
+
+  const handleDeviceGroupChange = async (event: SelectChangeEvent) => {
+    const nextDeviceGroup = event.target.value;
+    setSelectedDeviceGroup(nextDeviceGroup);
+    setTags([]);
+
+    if (!nextDeviceGroup) {
+      return;
+    }
+
+    setTagsLoading(true);
+
+    try {
+      const retrievedTags = await getAllPanoramaTags(nextDeviceGroup);
+      setTags(retrievedTags);
+    } catch (error) {
+      console.error("Failed to load tags:", error);
+      setTags([]);
+    } finally {
+      setTagsLoading(false);
+    }
   };
 
-  const handleLookupComplete = (groups: string[]) => {
+  const handleLookupComplete = async (groups: string[]) => {
     setDeviceGroups(groups);
+    setTags([]);
 
     if (groups.length === 1) {
-      setSelectedDeviceGroup(groups[0]);
+      const autoSelectedGroup = groups[0];
+      setSelectedDeviceGroup(autoSelectedGroup);
+
+      setTagsLoading(true);
+      try {
+        const retrievedTags = await getAllPanoramaTags(autoSelectedGroup);
+        setTags(retrievedTags);
+      } catch (error) {
+        console.error("Failed to load tags:", error);
+        setTags([]);
+      } finally {
+        setTagsLoading(false);
+      }
     } else {
       setSelectedDeviceGroup("");
     }
   };
-
-  const isDeviceGroupEnabled = deviceGroups.length > 0;
 
   return (
     <div className="create-rule">
@@ -50,7 +85,6 @@ export default function CreateARule() {
       </header>
 
       <div className="create-rule__body">
-
         <div className="create-rule__section">
           <div className="create-rule__section-header">
             <p className="IPSubtitle">
@@ -95,7 +129,7 @@ export default function CreateARule() {
               value={ticketNumber}
               onChange={(e) => setTicketNumber(e.target.value)}
               className="create-rule__input"
-              label="Enter ticket number"
+              label="Enter Ticket Number #"
               variant="outlined"
             />
           </Box>
@@ -112,7 +146,7 @@ export default function CreateARule() {
               value={ruleName}
               onChange={(e) => setRuleName(e.target.value)}
               className="create-rule__input"
-              label="Enter rule name"
+              label="Enter Rule Name"
               variant="outlined"
               disabled={trafficMode !== "manual"}
             />
@@ -132,7 +166,7 @@ export default function CreateARule() {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               className="create-rule__input"
-              label="Enter description"
+              label="Enter Description"
               variant="outlined"
               disabled={trafficMode !== "manual"}
             />
@@ -145,20 +179,14 @@ export default function CreateARule() {
               <IP2Zone onLookupComplete={handleLookupComplete} />
             </div>
 
-            <div className="create-rule__device-group">
-              <div className="create-rule__section">
-                <div className="create-rule__section-header">
-                  <p className="IPSubtitle">Device Group</p>
-                </div>
+            <div className="create-rule__section">
+              <div className="create-rule__section-header">
+                <p className="IPSubtitle">Device Group</p>
+              </div>
 
-                <Box
-                  className={`create-rule__input-wrap ${
-                    !isDeviceGroupEnabled
-                      ? "create-rule__input-wrap--disabled"
-                      : ""
-                  }`}
-                >
-                  <FormControl fullWidth disabled={!isDeviceGroupEnabled}>
+              <Box className="create-rule__input-wrap">
+                <div className="create-rule__input">
+                  <FormControl fullWidth disabled={deviceGroups.length === 0}>
                     <InputLabel id="device-group-select-label">
                       Select Device Group
                     </InputLabel>
@@ -168,7 +196,6 @@ export default function CreateARule() {
                       value={selectedDeviceGroup}
                       label="Select Device Group"
                       onChange={handleDeviceGroupChange}
-                      className="create-rule__input"
                     >
                       {deviceGroups.map((group) => (
                         <MenuItem key={group} value={group}>
@@ -177,8 +204,8 @@ export default function CreateARule() {
                       ))}
                     </Select>
                   </FormControl>
-                </Box>
-              </div>
+                </div>
+              </Box>
             </div>
 
             <div className="create-rule__section">
@@ -187,7 +214,23 @@ export default function CreateARule() {
               </div>
 
               <Box className="create-rule__input-wrap create-rule__multi-select">
-                <MultipleSelectCheckmarks />
+                <MultipleSelectCheckmarks
+                  options={tags}
+                  disabled={!selectedDeviceGroup || tagsLoading}
+                />
+              </Box>
+            </div>
+
+             <div className="create-rule__section">
+              <div className="create-rule__section-header">
+                <p className="IPSubtitle">Group Tag</p>
+              </div>
+
+              <Box className="create-rule__input-wrap create-rule__multi-select">
+                <SingleSelectTag
+                  options={tags}
+                  disabled={!selectedDeviceGroup || tagsLoading}
+                />
               </Box>
             </div>
           </>

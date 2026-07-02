@@ -83,7 +83,6 @@ namespace PanoramaBackend.Controllers
 
         /// <summary>
         /// Returns a combined list of:
-        /// - predefined tags
         /// - shared tags
         /// - device-group tags for the requested device group
         /// </summary>
@@ -109,27 +108,21 @@ namespace PanoramaBackend.Controllers
                 client.DefaultRequestHeaders.Clear();
                 client.DefaultRequestHeaders.Add("X-PAN-KEY", apiKey);
 
-                var predefinedUrl =
-                    $"{NormalizeHost(host)}/restapi/v11.2/Objects/Tags?location=predefined";
-
                 var sharedUrl =
                     $"{NormalizeHost(host)}/restapi/v11.2/Objects/Tags?location=shared";
 
                 var deviceGroupUrl =
                     $"{NormalizeHost(host)}/restapi/v11.2/Objects/Tags?location=device-group&device-group={Uri.EscapeDataString(request.DeviceGroup)}";
 
-                var predefinedTask = FetchTagsAsync(client, predefinedUrl);
                 var sharedTask = FetchTagsAsync(client, sharedUrl);
                 var deviceGroupTask = FetchTagsAsync(client, deviceGroupUrl);
 
-                await Task.WhenAll(predefinedTask, sharedTask, deviceGroupTask);
+                await Task.WhenAll(sharedTask, deviceGroupTask);
 
                 var combined = new List<PanoramaTagEntry>();
-                combined.AddRange(predefinedTask.Result);
                 combined.AddRange(sharedTask.Result);
                 combined.AddRange(deviceGroupTask.Result);
 
-                // Optional dedupe: keep exact unique combinations
                 var deduped = combined
                     .GroupBy(t => new
                     {
