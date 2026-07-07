@@ -11,7 +11,7 @@
         public string Destination { get; set; } = string.Empty; //Implemented
         public string Application { get; set; } = string.Empty;
         public string Service { get; set; } = string.Empty;
-        public string GroupTag { get; set; } = string.Empty;
+        public string GroupTag { get; set; } = string.Empty; //Implemented
         public string Tag { get; set; } = string.Empty; //Implemented
         public string Action { get; set; } = string.Empty;
         public string LogSetting { get; set; } = string.Empty;

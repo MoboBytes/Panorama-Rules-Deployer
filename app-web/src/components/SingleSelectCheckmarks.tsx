@@ -11,21 +11,42 @@ export type TagOption = {
 
 type SingleSelectTagProps = {
   options: TagOption[];
+  value?: TagOption | null;
+  onChange?: (value: TagOption | null) => void;
   disabled?: boolean;
+  id?: string;
+  label?: string;
+  placeholder?: string;
 };
 
 export default function SingleSelectTag({
   options,
+  value,
+  onChange,
   disabled = false,
+  id = "single-select-tag",
+  label = "Enter Group Tag",
+  placeholder = "Search group tags…",
 }: SingleSelectTagProps) {
-  const [selectedTag, setSelectedTag] = React.useState<TagOption | null>(null);
+  const [internalSelectedTag, setInternalSelectedTag] =
+    React.useState<TagOption | null>(null);
+
+  const selectedTag = value !== undefined ? value : internalSelectedTag;
+
+  const handleChange = (_: React.SyntheticEvent, newValue: TagOption | null) => {
+    if (value === undefined) {
+      setInternalSelectedTag(newValue);
+    }
+
+    onChange?.(newValue);
+  };
 
   return (
     <Autocomplete
-      id="group-tag-outlined"
+      id={id}
       options={options}
       value={selectedTag}
-      onChange={(_, newValue) => setSelectedTag(newValue)}
+      onChange={handleChange}
       disabled={disabled}
       getOptionLabel={(option) => option.name}
       isOptionEqualToValue={(option, value) =>
@@ -47,22 +68,11 @@ export default function SingleSelectTag({
       renderInput={(params) => (
         <TextField
           {...params}
-          label="Enter Group Tag"
-          placeholder={disabled ? "Select a device group first" : "Search group tags…"}
+          label={label}
+          placeholder={disabled ? "Unavailable" : placeholder}
         />
       )}
       fullWidth
-      sx={{
-        width: "100%",
-        "& .MuiAutocomplete-inputRoot": {
-          width: "100%",
-          minHeight: 52,
-          alignItems: "center",
-        },
-        "& .MuiAutocomplete-input": {
-          minWidth: "120px",
-        },
-      }}
     />
   );
 }

@@ -11,11 +11,15 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import "../styles/pages/CreateRule.css";
 import "../styles/components/IP2Zone.css";
+import "../styles/components/LogProfileStartEnd.css";
 import IP2Zone from "../components/IP2Zone";
 import MultipleSelectCheckmarks from "../components/MultipleSelectCheckmarks";
 import { getAllPanoramaTags } from "../services/PanoramaCreateRule";
 import type { PanoramaTagEntry } from "../services/PanoramaCreateRule";
 import SingleSelectTag from "../components/SingleSelectCheckmarks";
+import type { TagOption } from "../components/SingleSelectCheckmarks";
+import LogProfileStartEnd from "../components/LogProfileStartEnd";
+
 
 export default function CreateARule() {
   const [trafficMode, setTrafficMode] = useState("automatic");
@@ -28,6 +32,9 @@ export default function CreateARule() {
 
   const [tags, setTags] = useState<PanoramaTagEntry[]>([]);
   const [tagsLoading, setTagsLoading] = useState(false);
+
+  const [selectedLogProfile, setSelectedLogProfile] = useState<TagOption | null>(null);
+  const [selectedLogPositions, setSelectedLogPositions] = useState<string[]>([]);
 
   const handleDeviceGroupChange = async (event: SelectChangeEvent) => {
     const nextDeviceGroup = event.target.value;
@@ -73,6 +80,13 @@ export default function CreateARule() {
       setSelectedDeviceGroup("");
     }
   };
+
+  const logForwardingProfiles: TagOption[] = tags.map((tag) => ({
+    name: tag.name,
+    location: tag.location,
+    deviceGroup: tag.deviceGroup,
+    color: tag.color,
+  }));
 
   return (
     <div className="create-rule">
@@ -221,7 +235,7 @@ export default function CreateARule() {
               </Box>
             </div>
 
-             <div className="create-rule__section">
+            <div className="create-rule__section">
               <div className="create-rule__section-header">
                 <p className="IPSubtitle">Group Tag</p>
               </div>
@@ -230,6 +244,22 @@ export default function CreateARule() {
                 <SingleSelectTag
                   options={tags}
                   disabled={!selectedDeviceGroup || tagsLoading}
+                />
+              </Box>
+            </div>
+
+            <div className="create-rule__section">
+              <Box className="create-rule__input-wrap create-rule__log-profile-start-end">
+                <LogProfileStartEnd
+                  tagOptions={logForwardingProfiles}
+                  selectedTag={selectedLogProfile}
+                  onTagChange={setSelectedLogProfile}
+                  selectedPositions={selectedLogPositions}
+                  onPositionChange={setSelectedLogPositions}
+                  tagDisabled={!selectedDeviceGroup || tagsLoading}
+                  searchLabel="Enter Log Forwarding Profile"
+                  searchPlaceholder="Search log forwarding profiles..."
+                  helperText="Log Forwarding Profiles"
                 />
               </Box>
             </div>

@@ -18,8 +18,12 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 2,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
+            },
             {
               "$type": "Document",
               "DocumentIndex": 1,
@@ -28,7 +32,7 @@
               "RelativeDocumentMoniker": "app-api-project\\Models\\PanoramaPreRuleFields.cs",
               "ToolTip": "C:\\Users\\JESQUEDA\\Documents\\Code\\paronama_rules\\app-api\\app-api-solution\\app-api-project\\Models\\PanoramaPreRuleFields.cs",
               "RelativeToolTip": "app-api-project\\Models\\PanoramaPreRuleFields.cs",
-              "ViewState": "AgIAAAIAAAAAAAAAAAAxwA4AAABFAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAA+AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-07-02T15:11:22.923Z",
               "EditorCaption": ""
@@ -41,7 +45,7 @@
               "RelativeDocumentMoniker": "app-api-project\\Controllers\\CreateTagsController.cs",
               "ToolTip": "C:\\Users\\JESQUEDA\\Documents\\Code\\paronama_rules\\app-api\\app-api-solution\\app-api-project\\Controllers\\CreateTagsController.cs",
               "RelativeToolTip": "app-api-project\\Controllers\\CreateTagsController.cs",
-              "ViewState": "AgIAAJEAAAAAAAAAAAAgwLgAAAABAAAAAAAAAA==",
+              "ViewState": "AgIAACYAAAAAAAAAAAA8wLgAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-07-01T18:10:14.641Z",
               "EditorCaption": ""
