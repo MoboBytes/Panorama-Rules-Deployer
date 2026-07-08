@@ -48,6 +48,37 @@
         }
       }
     },
+    "/api/CreateServices/all": {
+      "post": {
+        "tags": [
+          "CreateServices"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetServicesRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetServicesRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetServicesRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/CreateTags/all": {
       "post": {
         "tags": [
@@ -193,6 +224,16 @@
   "components": {
     "schemas": {
       "GetLogForwardingProfilesRequest": {
+        "type": "object",
+        "properties": {
+          "deviceGroup": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetServicesRequest": {
         "type": "object",
         "properties": {
           "deviceGroup": {

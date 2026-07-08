@@ -17,10 +17,12 @@ import MultipleSelectCheckmarks from "../components/MultipleSelectCheckmarks";
 import {
   getAllPanoramaTags,
   getAllPanoramaLogForwardingProfiles,
+  getAllPanoramaSecurityProfileGroups,
 } from "../services/PanoramaCreateRule";
 import type {
   PanoramaTagEntry,
   PanoramaLogForwardingProfileEntry,
+  PanoramaSecurityProfileGroupEntry,
 } from "../services/PanoramaCreateRule";
 import SingleSelectTag from "../components/SingleSelectCheckmarks";
 import type { TagOption } from "../components/SingleSelectCheckmarks";
@@ -44,9 +46,17 @@ export default function CreateARule() {
   const [logForwardingProfilesLoading, setLogForwardingProfilesLoading] =
     useState(false);
 
+  const [securityProfileGroups, setSecurityProfileGroups] = useState<
+    PanoramaSecurityProfileGroupEntry[]
+  >([]);
+  const [securityProfileGroupsLoading, setSecurityProfileGroupsLoading] =
+    useState(false);
+
   const [selectedLogProfile, setSelectedLogProfile] =
     useState<TagOption | null>(null);
-  const [selectedLogPositions, setSelectedLogPositions] = useState<string[]>(["end"]);
+  const [selectedLogPositions, setSelectedLogPositions] = useState<string[]>([
+    "end",
+  ]);
 
   const [selectedAction, setSelectedAction] = useState("Allow");
 
@@ -55,6 +65,7 @@ export default function CreateARule() {
     setSelectedDeviceGroup(nextDeviceGroup);
     setTags([]);
     setLogForwardingProfilesData([]);
+    setSecurityProfileGroups([]);
 
     if (!nextDeviceGroup) {
       return;
@@ -62,6 +73,7 @@ export default function CreateARule() {
 
     setTagsLoading(true);
     setLogForwardingProfilesLoading(true);
+    setSecurityProfileGroupsLoading(true);
 
     try {
       const retrievedTags = await getAllPanoramaTags(nextDeviceGroup);
@@ -70,13 +82,19 @@ export default function CreateARule() {
       const retrievedLogForwardingProfiles =
         await getAllPanoramaLogForwardingProfiles(nextDeviceGroup);
       setLogForwardingProfilesData(retrievedLogForwardingProfiles);
+
+      const retrievedSecurityProfileGroups =
+        await getAllPanoramaSecurityProfileGroups();
+      setSecurityProfileGroups(retrievedSecurityProfileGroups);
     } catch (error) {
       console.error("Failed to load tags:", error);
       setTags([]);
       setLogForwardingProfilesData([]);
+      setSecurityProfileGroups([]);
     } finally {
       setTagsLoading(false);
       setLogForwardingProfilesLoading(false);
+      setSecurityProfileGroupsLoading(false);
     }
   };
 
@@ -84,6 +102,7 @@ export default function CreateARule() {
     setDeviceGroups(groups);
     setTags([]);
     setLogForwardingProfilesData([]);
+    setSecurityProfileGroups([]);
 
     if (groups.length === 1) {
       const autoSelectedGroup = groups[0];
@@ -91,6 +110,7 @@ export default function CreateARule() {
 
       setTagsLoading(true);
       setLogForwardingProfilesLoading(true);
+      setSecurityProfileGroupsLoading(true);
 
       try {
         const retrievedTags = await getAllPanoramaTags(autoSelectedGroup);
@@ -99,13 +119,19 @@ export default function CreateARule() {
         const retrievedLogForwardingProfiles =
           await getAllPanoramaLogForwardingProfiles(autoSelectedGroup);
         setLogForwardingProfilesData(retrievedLogForwardingProfiles);
+
+        const retrievedSecurityProfileGroups =
+          await getAllPanoramaSecurityProfileGroups();
+        setSecurityProfileGroups(retrievedSecurityProfileGroups);
       } catch (error) {
         console.error("Failed to load tags:", error);
         setTags([]);
         setLogForwardingProfilesData([]);
+        setSecurityProfileGroups([]);
       } finally {
         setTagsLoading(false);
         setLogForwardingProfilesLoading(false);
+        setSecurityProfileGroupsLoading(false);
       }
     } else {
       setSelectedDeviceGroup("");
@@ -117,6 +143,13 @@ export default function CreateARule() {
       name: profile.name,
       location: profile.location,
       deviceGroup: profile.deviceGroup,
+    })
+  );
+
+  const profileSettingOptions: TagOption[] = securityProfileGroups.map(
+    (profileGroup) => ({
+      name: profileGroup.name,
+      location: profileGroup.location,
     })
   );
 
@@ -297,7 +330,20 @@ export default function CreateARule() {
                 />
               </Box>
             </div>
-            
+
+            <div className="create-rule__section">
+              <div className="create-rule__section-header">
+                <p className="IPSubtitle">Profile Setting</p>
+              </div>
+
+              <Box className="create-rule__input-wrap create-rule__multi-select">
+                <SingleSelectTag
+                  options={profileSettingOptions}
+                  disabled={!selectedDeviceGroup || securityProfileGroupsLoading}
+                />
+              </Box>
+            </div>
+
             <div className="create-rule__section">
               <div className="create-rule__section-header">
                 <p className="IPSubtitle">Action</p>

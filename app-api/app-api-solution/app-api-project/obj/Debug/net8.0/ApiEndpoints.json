@@ -26,6 +26,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "PanoramaBackend.Controllers.CreateServicesController",
+    "Method": "GetAllServices",
+    "RelativePath": "api/CreateServices/all",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "PanoramaBackend.Controllers.CreateServicesController\u002BGetServicesRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "PanoramaBackend.Controllers.CreateTagsController",
     "Method": "GetAllTags",
     "RelativePath": "api/CreateTags/all",

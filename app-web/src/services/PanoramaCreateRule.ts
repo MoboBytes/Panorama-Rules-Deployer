@@ -26,6 +26,13 @@ export type PanoramaLogForwardingProfileEntry = {
   deviceGroup: string;
 };
 
+// ---------------- Profile Setting Types ----------------
+
+export type PanoramaSecurityProfileGroupEntry = {
+  name: string;
+  location: string;
+};
+
 // ---------------- Tag APIs ----------------
 
 export async function getAllPanoramaTags(
@@ -67,4 +74,23 @@ export async function getAllPanoramaLogForwardingProfiles(
   }
 
   return (await response.json()) as PanoramaLogForwardingProfileEntry[];
+}
+
+// ---------------- Profile Setting APIs ----------------
+
+export async function getAllPanoramaSecurityProfileGroups(): Promise<
+  PanoramaSecurityProfileGroupEntry[]
+> {
+  const response = await fetch(
+    `${BACKEND_BASE_URL}/api/CreateProfileSettings/all`
+  );
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(
+      text || "Failed to retrieve Panorama security profile groups"
+    );
+  }
+
+  return (await response.json()) as PanoramaSecurityProfileGroupEntry[];
 }
