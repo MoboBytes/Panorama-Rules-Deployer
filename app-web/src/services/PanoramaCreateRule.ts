@@ -1,6 +1,13 @@
-//Purpose of this page is to collect Tags, Group Tages, Applications, Services from "Create Rules" and send them towards the Create Rules Page.
+// Purpose of this page is to collect Tags, Group Tags, Applications, Services,
+// and Log Forwarding Profiles from "Create Rules" and send them toward the Create Rules page.
 
 const BACKEND_BASE_URL = "https://localhost:7206";
+
+// ---------------- Shared Request Types ----------------
+
+export type DeviceGroupRequest = {
+  deviceGroup: string;
+};
 
 // ---------------- Tag Types ----------------
 
@@ -11,7 +18,11 @@ export type PanoramaTagEntry = {
   color: string;
 };
 
-export type GetAllTagsRequest = {
+// ---------------- Log Forwarding Profile Types ----------------
+
+export type PanoramaLogForwardingProfileEntry = {
+  name: string;
+  location: string;
   deviceGroup: string;
 };
 
@@ -23,7 +34,7 @@ export async function getAllPanoramaTags(
   const response = await fetch(`${BACKEND_BASE_URL}/api/CreateTags/all`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ deviceGroup } satisfies GetAllTagsRequest),
+    body: JSON.stringify({ deviceGroup } satisfies DeviceGroupRequest),
   });
 
   if (!response.ok) {
@@ -32,4 +43,28 @@ export async function getAllPanoramaTags(
   }
 
   return (await response.json()) as PanoramaTagEntry[];
+}
+
+// ---------------- Log Forwarding Profile APIs ----------------
+
+export async function getAllPanoramaLogForwardingProfiles(
+  deviceGroup: string
+): Promise<PanoramaLogForwardingProfileEntry[]> {
+  const response = await fetch(
+    `${BACKEND_BASE_URL}/api/CreateLogForwardingProfiles/all`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ deviceGroup } satisfies DeviceGroupRequest),
+    }
+  );
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(
+      text || "Failed to retrieve Panorama log forwarding profiles"
+    );
+  }
+
+  return (await response.json()) as PanoramaLogForwardingProfileEntry[];
 }

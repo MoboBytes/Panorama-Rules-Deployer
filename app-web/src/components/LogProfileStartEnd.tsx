@@ -55,7 +55,7 @@ export default function LogProfileStartEnd({
   return (
     <Box className="log-profile-start-end">
       <Box className="log-profile-start-end__search">
-        <Typography className="log-profile-start-end__helper">{helperText}</Typography>
+        <p className="log_profile-helper_subtitle">{helperText}</p>
 
         <SingleSelectTag
           id="log-forwarding-profile-search"

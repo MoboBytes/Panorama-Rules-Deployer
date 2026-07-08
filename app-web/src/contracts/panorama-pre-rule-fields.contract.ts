@@ -12,6 +12,8 @@ export interface IPanoramaPreRuleFields {
     Tag: string;
     Action: string;
     LogSetting: string;
+    LogStart: string;
+    LogEnd: string;
     Description: string;
     DeviceGroup: string;
     Before: string;

@@ -19,8 +19,10 @@ const initialState: IInitialState = {
         Service: '',
         GroupTag: '',
         Tag: '',
-        Action: '',
+        Action: 'allow',
         LogSetting: '',
+        LogStart: '',
+        LogEnd: '',
         Description: '',
         DeviceGroup: '',
         Before: ''

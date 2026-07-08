@@ -5,6 +5,49 @@
     "version": "1.0"
   },
   "paths": {
+    "/api/CreateLogForwardingProfiles/all": {
+      "post": {
+        "tags": [
+          "CreateLogForwardingProfiles"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetLogForwardingProfilesRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetLogForwardingProfilesRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetLogForwardingProfilesRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/CreateProfileSettings/all": {
+      "get": {
+        "tags": [
+          "CreateProfileSettings"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/CreateTags/all": {
       "post": {
         "tags": [
@@ -149,6 +192,16 @@
   },
   "components": {
     "schemas": {
+      "GetLogForwardingProfilesRequest": {
+        "type": "object",
+        "properties": {
+          "deviceGroup": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "GetTagsRequest": {
         "type": "object",
         "properties": {

@@ -14,12 +14,17 @@ import "../styles/components/IP2Zone.css";
 import "../styles/components/LogProfileStartEnd.css";
 import IP2Zone from "../components/IP2Zone";
 import MultipleSelectCheckmarks from "../components/MultipleSelectCheckmarks";
-import { getAllPanoramaTags } from "../services/PanoramaCreateRule";
-import type { PanoramaTagEntry } from "../services/PanoramaCreateRule";
+import {
+  getAllPanoramaTags,
+  getAllPanoramaLogForwardingProfiles,
+} from "../services/PanoramaCreateRule";
+import type {
+  PanoramaTagEntry,
+  PanoramaLogForwardingProfileEntry,
+} from "../services/PanoramaCreateRule";
 import SingleSelectTag from "../components/SingleSelectCheckmarks";
 import type { TagOption } from "../components/SingleSelectCheckmarks";
 import LogProfileStartEnd from "../components/LogProfileStartEnd";
-
 
 export default function CreateARule() {
   const [trafficMode, setTrafficMode] = useState("automatic");
@@ -33,60 +38,87 @@ export default function CreateARule() {
   const [tags, setTags] = useState<PanoramaTagEntry[]>([]);
   const [tagsLoading, setTagsLoading] = useState(false);
 
-  const [selectedLogProfile, setSelectedLogProfile] = useState<TagOption | null>(null);
-  const [selectedLogPositions, setSelectedLogPositions] = useState<string[]>([]);
+  const [logForwardingProfilesData, setLogForwardingProfilesData] = useState<
+    PanoramaLogForwardingProfileEntry[]
+  >([]);
+  const [logForwardingProfilesLoading, setLogForwardingProfilesLoading] =
+    useState(false);
+
+  const [selectedLogProfile, setSelectedLogProfile] =
+    useState<TagOption | null>(null);
+  const [selectedLogPositions, setSelectedLogPositions] = useState<string[]>(["end"]);
+
+  const [selectedAction, setSelectedAction] = useState("Allow");
 
   const handleDeviceGroupChange = async (event: SelectChangeEvent) => {
     const nextDeviceGroup = event.target.value;
     setSelectedDeviceGroup(nextDeviceGroup);
     setTags([]);
+    setLogForwardingProfilesData([]);
 
     if (!nextDeviceGroup) {
       return;
     }
 
     setTagsLoading(true);
+    setLogForwardingProfilesLoading(true);
 
     try {
       const retrievedTags = await getAllPanoramaTags(nextDeviceGroup);
       setTags(retrievedTags);
+
+      const retrievedLogForwardingProfiles =
+        await getAllPanoramaLogForwardingProfiles(nextDeviceGroup);
+      setLogForwardingProfilesData(retrievedLogForwardingProfiles);
     } catch (error) {
       console.error("Failed to load tags:", error);
       setTags([]);
+      setLogForwardingProfilesData([]);
     } finally {
       setTagsLoading(false);
+      setLogForwardingProfilesLoading(false);
     }
   };
 
   const handleLookupComplete = async (groups: string[]) => {
     setDeviceGroups(groups);
     setTags([]);
+    setLogForwardingProfilesData([]);
 
     if (groups.length === 1) {
       const autoSelectedGroup = groups[0];
       setSelectedDeviceGroup(autoSelectedGroup);
 
       setTagsLoading(true);
+      setLogForwardingProfilesLoading(true);
+
       try {
         const retrievedTags = await getAllPanoramaTags(autoSelectedGroup);
         setTags(retrievedTags);
+
+        const retrievedLogForwardingProfiles =
+          await getAllPanoramaLogForwardingProfiles(autoSelectedGroup);
+        setLogForwardingProfilesData(retrievedLogForwardingProfiles);
       } catch (error) {
         console.error("Failed to load tags:", error);
         setTags([]);
+        setLogForwardingProfilesData([]);
       } finally {
         setTagsLoading(false);
+        setLogForwardingProfilesLoading(false);
       }
     } else {
       setSelectedDeviceGroup("");
     }
   };
 
-  const logForwardingProfiles: TagOption[] = tags.map((tag) => ({
-    name: tag.name,
-    location: tag.location,
-    deviceGroup: tag.deviceGroup,
-    color: tag.color,
-  }));
+  const logForwardingProfiles: TagOption[] = logForwardingProfilesData.map(
+    (profile) => ({
+      name: profile.name,
+      location: profile.location,
+      deviceGroup: profile.deviceGroup,
+    })
+  );
 
   return (
     <div className="create-rule">
@@ -256,11 +288,39 @@ export default function CreateARule() {
                   onTagChange={setSelectedLogProfile}
                   selectedPositions={selectedLogPositions}
                   onPositionChange={setSelectedLogPositions}
-                  tagDisabled={!selectedDeviceGroup || tagsLoading}
+                  tagDisabled={
+                    !selectedDeviceGroup || logForwardingProfilesLoading
+                  }
                   searchLabel="Enter Log Forwarding Profile"
                   searchPlaceholder="Search log forwarding profiles..."
                   helperText="Log Forwarding Profiles"
                 />
+              </Box>
+            </div>
+            
+            <div className="create-rule__section">
+              <div className="create-rule__section-header">
+                <p className="IPSubtitle">Action</p>
+              </div>
+
+              <Box className="create-rule__input-wrap">
+                <div className="create-rule__input">
+                  <FormControl fullWidth disabled={deviceGroups.length === 0}>
+                    <InputLabel id="action-select-label">
+                      Select Action
+                    </InputLabel>
+                    <Select
+                      labelId="action-select-label"
+                      id="action-select"
+                      value={selectedAction}
+                      label="Select Action"
+                      onChange={(event) => setSelectedAction(event.target.value)}
+                    >
+                      <MenuItem value="Allow">Allow</MenuItem>
+                      <MenuItem value="Deny">Deny</MenuItem>
+                    </Select>
+                  </FormControl>
+                </div>
               </Box>
             </div>
           </>

@@ -7,6 +7,9 @@
 
 .log-profile-start-end__search {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .log-profile-start-end__position {
@@ -19,12 +22,13 @@
   line-height: 1.2; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; 
 }
 
-.log-profile-start-end__helper {
-  margin: 10px; 
-  font-size: 1.1rem; 
-  font-weight: 700; 
+.log_profile-helper_subtitle {
+  margin: 0 0 3px 0px;
+  font-size: 1.1rem;
+  font-weight: 700;
   color: var(--text-main);
-   line-height: 1.2; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; 
+  line-height: 1.2;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 /* Search field */
