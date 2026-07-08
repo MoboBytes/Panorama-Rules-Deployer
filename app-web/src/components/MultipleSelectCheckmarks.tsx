@@ -18,11 +18,15 @@ export type TagOption = {
 type MultipleSelectCheckmarksProps = {
   options: TagOption[];
   disabled?: boolean;
+  label?: string;
+  placeholder?: string;
 };
 
 export default function MultipleSelectCheckmarks({
   options,
   disabled = false,
+  label = "Enter Tags",
+  placeholder = "Search tags…",
 }: MultipleSelectCheckmarksProps) {
   const [selectedTags, setSelectedTags] = React.useState<TagOption[]>([]);
 
@@ -68,8 +72,8 @@ export default function MultipleSelectCheckmarks({
       renderInput={(params) => (
         <TextField
           {...params}
-          label="Enter Tags"
-          placeholder={disabled ? "Select a device group first" : "Search tags…"}
+          label={label}
+          placeholder={disabled ? "Select a device group first" : placeholder}
         />
       )}
       fullWidth

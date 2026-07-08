@@ -5,6 +5,37 @@
     "version": "1.0"
   },
   "paths": {
+    "/api/CreateApplications/all": {
+      "post": {
+        "tags": [
+          "CreateApplications"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetApplicationsRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetApplicationsRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetApplicationsRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/CreateLogForwardingProfiles/all": {
       "post": {
         "tags": [
@@ -223,6 +254,16 @@
   },
   "components": {
     "schemas": {
+      "GetApplicationsRequest": {
+        "type": "object",
+        "properties": {
+          "deviceGroup": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "GetLogForwardingProfilesRequest": {
         "type": "object",
         "properties": {

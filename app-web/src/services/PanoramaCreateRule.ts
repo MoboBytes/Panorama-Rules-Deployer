@@ -33,6 +33,15 @@ export type PanoramaSecurityProfileGroupEntry = {
   location: string;
 };
 
+// ---------------- Service Types ----------------
+
+export type PanoramaServiceEntry = {
+  name: string;
+  location: string;
+  deviceGroup: string;
+  entryType: string;
+};
+
 // ---------------- Tag APIs ----------------
 
 export async function getAllPanoramaTags(
@@ -93,4 +102,23 @@ export async function getAllPanoramaSecurityProfileGroups(): Promise<
   }
 
   return (await response.json()) as PanoramaSecurityProfileGroupEntry[];
+}
+
+// ---------------- Service APIs ----------------
+
+export async function getAllPanoramaServices(
+  deviceGroup: string
+): Promise<PanoramaServiceEntry[]> {
+  const response = await fetch(`${BACKEND_BASE_URL}/api/CreateServices/all`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ deviceGroup } satisfies DeviceGroupRequest),
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(text || "Failed to retrieve Panorama services");
+  }
+
+  return (await response.json()) as PanoramaServiceEntry[];
 }

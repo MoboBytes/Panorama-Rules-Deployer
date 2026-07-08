@@ -14,19 +14,21 @@ import "../styles/components/IP2Zone.css";
 import "../styles/components/LogProfileStartEnd.css";
 import IP2Zone from "../components/IP2Zone";
 import MultipleSelectCheckmarks from "../components/MultipleSelectCheckmarks";
+import SingleSelectTag from "../components/SingleSelectCheckmarks";
+import type { TagOption } from "../components/SingleSelectCheckmarks";
+import LogProfileStartEnd from "../components/LogProfileStartEnd";
 import {
   getAllPanoramaTags,
   getAllPanoramaLogForwardingProfiles,
   getAllPanoramaSecurityProfileGroups,
+  getAllPanoramaServices,
 } from "../services/PanoramaCreateRule";
 import type {
   PanoramaTagEntry,
   PanoramaLogForwardingProfileEntry,
   PanoramaSecurityProfileGroupEntry,
+  PanoramaServiceEntry,
 } from "../services/PanoramaCreateRule";
-import SingleSelectTag from "../components/SingleSelectCheckmarks";
-import type { TagOption } from "../components/SingleSelectCheckmarks";
-import LogProfileStartEnd from "../components/LogProfileStartEnd";
 
 export default function CreateARule() {
   const [trafficMode, setTrafficMode] = useState("automatic");
@@ -39,6 +41,9 @@ export default function CreateARule() {
 
   const [tags, setTags] = useState<PanoramaTagEntry[]>([]);
   const [tagsLoading, setTagsLoading] = useState(false);
+
+  const [services, setServices] = useState<PanoramaServiceEntry[]>([]);
+  const [servicesLoading, setServicesLoading] = useState(false);
 
   const [logForwardingProfilesData, setLogForwardingProfilesData] = useState<
     PanoramaLogForwardingProfileEntry[]
@@ -64,6 +69,7 @@ export default function CreateARule() {
     const nextDeviceGroup = event.target.value;
     setSelectedDeviceGroup(nextDeviceGroup);
     setTags([]);
+    setServices([]);
     setLogForwardingProfilesData([]);
     setSecurityProfileGroups([]);
 
@@ -72,12 +78,16 @@ export default function CreateARule() {
     }
 
     setTagsLoading(true);
+    setServicesLoading(true);
     setLogForwardingProfilesLoading(true);
     setSecurityProfileGroupsLoading(true);
 
     try {
       const retrievedTags = await getAllPanoramaTags(nextDeviceGroup);
       setTags(retrievedTags);
+
+      const retrievedServices = await getAllPanoramaServices(nextDeviceGroup);
+      setServices(retrievedServices);
 
       const retrievedLogForwardingProfiles =
         await getAllPanoramaLogForwardingProfiles(nextDeviceGroup);
@@ -89,10 +99,12 @@ export default function CreateARule() {
     } catch (error) {
       console.error("Failed to load tags:", error);
       setTags([]);
+      setServices([]);
       setLogForwardingProfilesData([]);
       setSecurityProfileGroups([]);
     } finally {
       setTagsLoading(false);
+      setServicesLoading(false);
       setLogForwardingProfilesLoading(false);
       setSecurityProfileGroupsLoading(false);
     }
@@ -101,6 +113,7 @@ export default function CreateARule() {
   const handleLookupComplete = async (groups: string[]) => {
     setDeviceGroups(groups);
     setTags([]);
+    setServices([]);
     setLogForwardingProfilesData([]);
     setSecurityProfileGroups([]);
 
@@ -109,12 +122,16 @@ export default function CreateARule() {
       setSelectedDeviceGroup(autoSelectedGroup);
 
       setTagsLoading(true);
+      setServicesLoading(true);
       setLogForwardingProfilesLoading(true);
       setSecurityProfileGroupsLoading(true);
 
       try {
         const retrievedTags = await getAllPanoramaTags(autoSelectedGroup);
         setTags(retrievedTags);
+
+        const retrievedServices = await getAllPanoramaServices(autoSelectedGroup);
+        setServices(retrievedServices);
 
         const retrievedLogForwardingProfiles =
           await getAllPanoramaLogForwardingProfiles(autoSelectedGroup);
@@ -126,10 +143,12 @@ export default function CreateARule() {
       } catch (error) {
         console.error("Failed to load tags:", error);
         setTags([]);
+        setServices([]);
         setLogForwardingProfilesData([]);
         setSecurityProfileGroups([]);
       } finally {
         setTagsLoading(false);
+        setServicesLoading(false);
         setLogForwardingProfilesLoading(false);
         setSecurityProfileGroupsLoading(false);
       }
@@ -137,6 +156,12 @@ export default function CreateARule() {
       setSelectedDeviceGroup("");
     }
   };
+
+  const serviceOptions: TagOption[] = services.map((service) => ({
+    name: service.name,
+    location: service.location,
+    deviceGroup: service.deviceGroup,
+  }));
 
   const logForwardingProfiles: TagOption[] = logForwardingProfilesData.map(
     (profile) => ({
@@ -289,6 +314,20 @@ export default function CreateARule() {
 
             <div className="create-rule__section">
               <div className="create-rule__section-header">
+                <p className="IPSubtitle">Services</p>
+              </div>
+
+              <Box className="create-rule__input-wrap create-rule__multi-select">
+                <MultipleSelectCheckmarks
+                  options={serviceOptions}
+                  disabled={!selectedDeviceGroup || servicesLoading}
+                  label="Select Services"
+                />
+              </Box>
+            </div>
+
+            <div className="create-rule__section">
+              <div className="create-rule__section-header">
                 <p className="IPSubtitle">Tags</p>
               </div>
 
@@ -340,6 +379,7 @@ export default function CreateARule() {
                 <SingleSelectTag
                   options={profileSettingOptions}
                   disabled={!selectedDeviceGroup || securityProfileGroupsLoading}
+                  label="Enter Security Profile Group"
                 />
               </Box>
             </div>
@@ -351,7 +391,7 @@ export default function CreateARule() {
 
               <Box className="create-rule__input-wrap">
                 <div className="create-rule__input">
-                  <FormControl fullWidth disabled={deviceGroups.length === 0}>
+                  <FormControl fullWidth disabled={!selectedDeviceGroup}>
                     <InputLabel id="action-select-label">
                       Select Action
                     </InputLabel>

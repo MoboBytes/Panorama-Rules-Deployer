@@ -1,5 +1,21 @@
 [
   {
+    "ContainingType": "PanoramaBackend.Controllers.CreateApplicationsController",
+    "Method": "GetAllApplications",
+    "RelativePath": "api/CreateApplications/all",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "PanoramaBackend.Controllers.CreateApplicationsController\u002BGetApplicationsRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "PanoramaBackend.Controllers.CreateLogForwardingProfilesController",
     "Method": "GetAllLogForwardingProfiles",
     "RelativePath": "api/CreateLogForwardingProfiles/all",

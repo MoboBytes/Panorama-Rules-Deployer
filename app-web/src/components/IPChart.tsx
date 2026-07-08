@@ -68,7 +68,7 @@ export const IPChart: React.FC<IPChartProps> = ({
 
             <ListItem>
               <TagIcon className="ipchart__icon" />
-              <ListItemText primary="Firewall Group:" />
+              <ListItemText primary="Device Group:" />
               <Typography>{firewallGroup}</Typography>
             </ListItem>
 
