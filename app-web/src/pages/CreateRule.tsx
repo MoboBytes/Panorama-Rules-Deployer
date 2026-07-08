@@ -22,12 +22,14 @@ import {
   getAllPanoramaLogForwardingProfiles,
   getAllPanoramaSecurityProfileGroups,
   getAllPanoramaServices,
+  getAllPanoramaApplications,
 } from "../services/PanoramaCreateRule";
 import type {
   PanoramaTagEntry,
   PanoramaLogForwardingProfileEntry,
   PanoramaSecurityProfileGroupEntry,
   PanoramaServiceEntry,
+  PanoramaApplicationEntry,
 } from "../services/PanoramaCreateRule";
 
 export default function CreateARule() {
@@ -41,6 +43,11 @@ export default function CreateARule() {
 
   const [tags, setTags] = useState<PanoramaTagEntry[]>([]);
   const [tagsLoading, setTagsLoading] = useState(false);
+
+  const [applications, setApplications] = useState<PanoramaApplicationEntry[]>(
+    []
+  );
+  const [applicationsLoading, setApplicationsLoading] = useState(false);
 
   const [services, setServices] = useState<PanoramaServiceEntry[]>([]);
   const [servicesLoading, setServicesLoading] = useState(false);
@@ -69,6 +76,7 @@ export default function CreateARule() {
     const nextDeviceGroup = event.target.value;
     setSelectedDeviceGroup(nextDeviceGroup);
     setTags([]);
+    setApplications([]);
     setServices([]);
     setLogForwardingProfilesData([]);
     setSecurityProfileGroups([]);
@@ -78,6 +86,7 @@ export default function CreateARule() {
     }
 
     setTagsLoading(true);
+    setApplicationsLoading(true);
     setServicesLoading(true);
     setLogForwardingProfilesLoading(true);
     setSecurityProfileGroupsLoading(true);
@@ -85,6 +94,10 @@ export default function CreateARule() {
     try {
       const retrievedTags = await getAllPanoramaTags(nextDeviceGroup);
       setTags(retrievedTags);
+
+      const retrievedApplications =
+        await getAllPanoramaApplications(nextDeviceGroup);
+      setApplications(retrievedApplications);
 
       const retrievedServices = await getAllPanoramaServices(nextDeviceGroup);
       setServices(retrievedServices);
@@ -99,11 +112,13 @@ export default function CreateARule() {
     } catch (error) {
       console.error("Failed to load tags:", error);
       setTags([]);
+      setApplications([]);
       setServices([]);
       setLogForwardingProfilesData([]);
       setSecurityProfileGroups([]);
     } finally {
       setTagsLoading(false);
+      setApplicationsLoading(false);
       setServicesLoading(false);
       setLogForwardingProfilesLoading(false);
       setSecurityProfileGroupsLoading(false);
@@ -113,6 +128,7 @@ export default function CreateARule() {
   const handleLookupComplete = async (groups: string[]) => {
     setDeviceGroups(groups);
     setTags([]);
+    setApplications([]);
     setServices([]);
     setLogForwardingProfilesData([]);
     setSecurityProfileGroups([]);
@@ -122,6 +138,7 @@ export default function CreateARule() {
       setSelectedDeviceGroup(autoSelectedGroup);
 
       setTagsLoading(true);
+      setApplicationsLoading(true);
       setServicesLoading(true);
       setLogForwardingProfilesLoading(true);
       setSecurityProfileGroupsLoading(true);
@@ -129,6 +146,10 @@ export default function CreateARule() {
       try {
         const retrievedTags = await getAllPanoramaTags(autoSelectedGroup);
         setTags(retrievedTags);
+
+        const retrievedApplications =
+          await getAllPanoramaApplications(autoSelectedGroup);
+        setApplications(retrievedApplications);
 
         const retrievedServices = await getAllPanoramaServices(autoSelectedGroup);
         setServices(retrievedServices);
@@ -143,11 +164,13 @@ export default function CreateARule() {
       } catch (error) {
         console.error("Failed to load tags:", error);
         setTags([]);
+        setApplications([]);
         setServices([]);
         setLogForwardingProfilesData([]);
         setSecurityProfileGroups([]);
       } finally {
         setTagsLoading(false);
+        setApplicationsLoading(false);
         setServicesLoading(false);
         setLogForwardingProfilesLoading(false);
         setSecurityProfileGroupsLoading(false);
@@ -156,6 +179,12 @@ export default function CreateARule() {
       setSelectedDeviceGroup("");
     }
   };
+
+  const applicationOptions: TagOption[] = applications.map((application) => ({
+    name: application.name,
+    location: application.location,
+    deviceGroup: application.deviceGroup,
+  }));
 
   const serviceOptions: TagOption[] = services.map((service) => ({
     name: service.name,
@@ -314,7 +343,21 @@ export default function CreateARule() {
 
             <div className="create-rule__section">
               <div className="create-rule__section-header">
-                <p className="IPSubtitle">Services</p>
+                <p className="IPSubtitle">Application</p>
+              </div>
+
+              <Box className="create-rule__input-wrap create-rule__multi-select">
+                <MultipleSelectCheckmarks
+                  options={applicationOptions}
+                  disabled={!selectedDeviceGroup || applicationsLoading}
+                  label="Select Applications"
+                />
+              </Box>
+            </div>
+
+            <div className="create-rule__section">
+              <div className="create-rule__section-header">
+                <p className="IPSubtitle">Service</p>
               </div>
 
               <Box className="create-rule__input-wrap create-rule__multi-select">

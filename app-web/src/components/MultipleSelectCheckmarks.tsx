@@ -72,8 +72,14 @@ export default function MultipleSelectCheckmarks({
       renderInput={(params) => (
         <TextField
           {...params}
-          label={label}
-          placeholder={disabled ? "Select a device group first" : placeholder}
+          label={selectedTags.length > 0 ? "" : label}
+          placeholder={
+            disabled
+              ? "Select a device group first"
+              : selectedTags.length > 0
+              ? ""
+              : placeholder
+          }
         />
       )}
       fullWidth

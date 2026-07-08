@@ -42,6 +42,15 @@ export type PanoramaServiceEntry = {
   entryType: string;
 };
 
+// ---------------- Application Types ----------------
+
+export type PanoramaApplicationEntry = {
+  name: string;
+  location: string;
+  deviceGroup: string;
+  entryType: string;
+};
+
 // ---------------- Tag APIs ----------------
 
 export async function getAllPanoramaTags(
@@ -121,4 +130,26 @@ export async function getAllPanoramaServices(
   }
 
   return (await response.json()) as PanoramaServiceEntry[];
+}
+
+// ---------------- Application APIs ----------------
+
+export async function getAllPanoramaApplications(
+  deviceGroup: string
+): Promise<PanoramaApplicationEntry[]> {
+  const response = await fetch(
+    `${BACKEND_BASE_URL}/api/CreateApplications/all`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ deviceGroup } satisfies DeviceGroupRequest),
+    }
+  );
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(text || "Failed to retrieve Panorama applications");
+  }
+
+  return (await response.json()) as PanoramaApplicationEntry[];
 }

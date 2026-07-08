@@ -44,7 +44,7 @@
               "RelativeDocumentMoniker": "app-api-project\\Controllers\\CreateApplicationController.cs",
               "ToolTip": "C:\\Users\\JESQUEDA\\Documents\\Code\\paronama_rules\\app-api\\app-api-solution\\app-api-project\\Controllers\\CreateApplicationController.cs",
               "RelativeToolTip": "app-api-project\\Controllers\\CreateApplicationController.cs",
-              "ViewState": "AgIAAL0AAAAAAAAAAAAwwM4AAAAyAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAM4AAAAyAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-07-08T19:58:42.905Z",
               "EditorCaption": ""
@@ -59,8 +59,7 @@
               "RelativeToolTip": "app-api-project\\Controllers\\CreateLogForwardingProfilesController.cs",
               "ViewState": "AgIAAJkAAAAAAAAAAAAcwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-08T19:44:45.385Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-07-08T19:44:45.385Z"
             },
             {
               "$type": "Document",
@@ -72,8 +71,7 @@
               "RelativeToolTip": "app-api-project\\Models\\PanoramaPreRuleFields.cs",
               "ViewState": "AgIAAAQAAAAAAAAAAAA1wAsAAAAhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-08T19:36:10.212Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-07-08T19:36:10.212Z"
             },
             {
               "$type": "Document",
@@ -85,8 +83,7 @@
               "RelativeToolTip": "app-api-project\\Controllers\\CreateServiceController.cs",
               "ViewState": "AgIAAMYAAAAAAAAAAAA5wO8AAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-08T17:28:02.541Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-07-08T17:28:02.541Z"
             },
             {
               "$type": "Document",
@@ -98,8 +95,7 @@
               "RelativeToolTip": "app-api-project\\Controllers\\CreateProfileSettingController.cs",
               "ViewState": "AgIAAHoAAAAAAAAAAAAwwJcAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-08T14:01:32.481Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-07-08T14:01:32.481Z"
             },
             {
               "$type": "Document",
