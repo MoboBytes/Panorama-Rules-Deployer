@@ -31,11 +31,14 @@ import type {
   PanoramaServiceEntry,
   PanoramaApplicationEntry,
 } from "../services/PanoramaCreateRule";
+import TicketNumber from "../components/TicketNumber";
+import NameField from "../components/NameTextField";
 
 export default function CreateARule() {
   const [trafficMode, setTrafficMode] = useState("automatic");
   const [ruleName, setRuleName] = useState("");
   const [ticketNumber, setTicketNumber] = useState("");
+  const [requesterName, setRequesterName] = useState("");
   const [description, setDescription] = useState("");
 
   const [deviceGroups, setDeviceGroups] = useState<string[]>([]);
@@ -251,22 +254,17 @@ export default function CreateARule() {
           </Box>
         </div>
 
-        <div className="create-rule__section">
-          <div className="create-rule__section-header">
-            <p className="IPSubtitle">Ticket Number</p>
-          </div>
+        <TicketNumber
+          value={ticketNumber}
+          onChange={setTicketNumber}
+        />
 
-          <Box className="create-rule__input-wrap">
-            <TextField
-              fullWidth
-              value={ticketNumber}
-              onChange={(e) => setTicketNumber(e.target.value)}
-              className="create-rule__input"
-              label="Enter Ticket Number #"
-              variant="outlined"
-            />
-          </Box>
-        </div>
+        <NameField
+          value={requesterName}
+          onChange={setRequesterName}
+          title="Requester"
+          label="Enter Requester Name"
+        />
 
         <div className="create-rule__section">
           <div className="create-rule__section-header">

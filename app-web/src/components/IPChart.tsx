@@ -10,11 +10,14 @@ import {
 import DnsIcon from "@mui/icons-material/Dns";
 import LanIcon from "@mui/icons-material/Lan";
 import TagIcon from "@mui/icons-material/Tag";
+import NameField from "./NameTextField";
 
 type IPChartProps = {
   onIpChange: (value: string) => void;
+  onIpNameChange: (value: string) => void;
   ChartTitle: string;
   IPAddress: string;
+  IPName: string;
   firewallHostname: string;
   firewallSerialNumber: string;
   zone: string;
@@ -23,7 +26,9 @@ type IPChartProps = {
 
 export const IPChart: React.FC<IPChartProps> = ({
   onIpChange,
+  onIpNameChange,
   IPAddress,
+  IPName,
   ChartTitle,
   firewallHostname,
   firewallSerialNumber,
@@ -46,6 +51,13 @@ export const IPChart: React.FC<IPChartProps> = ({
           className="ipchart__input"
         />
       </Box>
+
+      <NameField
+                value={IPName}
+                onChange={onIpNameChange}
+                title="IP Name"
+                label="Enter IP Name"
+      />
 
       <Box className="ipchart__details">
         <Box className="ipchart__detail-card">

@@ -1,0 +1,75 @@
+.name-field {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.name-field__header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.name-field__title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-main);
+  line-height: 1.2;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+}
+
+.name-field__asterisk {
+  color: #d32f2f;
+  font-weight: 700;
+}
+
+.name-field__input-wrap {
+  width: 100%;
+}
+
+.name-field__input {
+  width: 100%;
+}
+
+.name-field__input .MuiFormControl-root {
+  width: 100%;
+}
+
+.name-field__input .MuiInputBase-root,
+.name-field__input .MuiOutlinedInput-root {
+  border-radius: 14px;
+  background-color: #ffffff;
+  font-size: 0.95rem;
+}
+
+.name-field__input .MuiOutlinedInput-root:not(.MuiInputBase-multiline) {
+  min-height: 52px;
+}
+
+.name-field__input .MuiOutlinedInput-notchedOutline {
+  border-color: #d8e1ee;
+}
+
+.name-field__input
+  .MuiOutlinedInput-root:hover
+  .MuiOutlinedInput-notchedOutline {
+  border-color: #bfd0eb;
+}
+
+.name-field__input
+  .MuiOutlinedInput-root.Mui-focused
+  .MuiOutlinedInput-notchedOutline {
+  border-color: var(--accent);
+  border-width: 2px;
+}
+
+.name-field__input .MuiInputLabel-root {
+  color: #70819b;
+  font-size: 0.92rem;
+}
+
+.name-field__input .MuiInputLabel-root.Mui-focused {
+  color: var(--accent);
+}

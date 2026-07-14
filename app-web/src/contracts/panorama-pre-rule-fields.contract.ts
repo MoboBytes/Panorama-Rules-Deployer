@@ -1,6 +1,5 @@
 export interface IPanoramaPreRuleFields {
-    RuleName: string;
-    TicketNumber: string;   
+    RuleName: string; 
     ProfileSetting: string;
     To: string;
     From: string;
@@ -16,5 +15,8 @@ export interface IPanoramaPreRuleFields {
     LogEnd: string;
     Description: string;
     DeviceGroup: string;
-    Before: string;
+    Requester: string;
+    TicketNumber: string;
+    SourceName: string;
+    DestinationName: string;
 }

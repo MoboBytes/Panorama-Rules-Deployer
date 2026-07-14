@@ -9,7 +9,6 @@ interface IInitialState {
 const initialState: IInitialState = {
     PanoramaPreRuleFields: {
         RuleName: '',
-        TicketNumber: '',
         ProfileSetting: '',
         To: '',
         From: '',
@@ -19,13 +18,16 @@ const initialState: IInitialState = {
         Service: '',
         GroupTag: '',
         Tag: '',
-        Action: 'allow',
+        Action: '',
         LogSetting: '',
         LogStart: '',
         LogEnd: '',
         Description: '',
         DeviceGroup: '',
-        Before: ''
+        Requester: '',
+        TicketNumber: '',
+        SourceName: '',
+        DestinationName: ''
     }
 };
 

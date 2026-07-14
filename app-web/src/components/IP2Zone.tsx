@@ -34,9 +34,11 @@ const emptyDetails: ChartDetails = {
 
 export default function IP2Zone({ onLookupComplete }: IP2ZoneProps) {
   const [sourceIp, setSourceIp] = useState("");
+  const [sourceIpName, setSourceIpName] = useState("");
   const [sourceDetails, setSourceDetails] = useState<ChartDetails>(emptyDetails);
 
   const [destIp, setDestIp] = useState("");
+  const [destIpName, setDestIpName] = useState("");
   const [destDetails, setDestDetails] = useState<ChartDetails>(emptyDetails);
 
   const [lookupLoading, setLookupLoading] = useState(false);
@@ -209,7 +211,9 @@ export default function IP2Zone({ onLookupComplete }: IP2ZoneProps) {
           <div className="panorama-chart-card">
             <IPChart
               onIpChange={setSourceIp}
+              onIpNameChange={setSourceIpName}
               IPAddress={sourceIp}
+              IPName={sourceIpName}
               ChartTitle="Source IP:"
               firewallHostname={sourceDetails.firewallHostname}
               firewallSerialNumber={sourceDetails.firewallSerialNumber}
@@ -221,7 +225,9 @@ export default function IP2Zone({ onLookupComplete }: IP2ZoneProps) {
           <div className="panorama-chart-card">
             <IPChart
               onIpChange={setDestIp}
+              onIpNameChange={setDestIpName}
               IPAddress={destIp}
+              IPName={destIpName}
               ChartTitle="Destination IP:"
               firewallHostname={destDetails.firewallHostname}
               firewallSerialNumber={destDetails.firewallSerialNumber}
