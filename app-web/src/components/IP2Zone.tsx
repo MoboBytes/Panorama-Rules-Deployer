@@ -14,7 +14,7 @@ import type {
   ZoneByIpResult,
 } from "../services/PanoramaZoneControllerClient";
 
-type ChartDetails = {
+export type ChartDetails = {
   firewallHostname: string;
   firewallSerialNumber: string;
   zone: string;
@@ -22,25 +22,45 @@ type ChartDetails = {
 };
 
 type IP2ZoneProps = {
+  sourceIp: string;
+  onSourceIpChange: (value: string) => void;
+  sourceIpName: string;
+  onSourceIpNameChange: (value: string) => void;
+  sourceDetails: ChartDetails;
+  onSourceDetailsChange: (value: ChartDetails) => void;
+
+  destIp: string;
+  onDestIpChange: (value: string) => void;
+  destIpName: string;
+  onDestIpNameChange: (value: string) => void;
+  destDetails: ChartDetails;
+  onDestDetailsChange: (value: ChartDetails) => void;
+
   onLookupComplete?: (deviceGroups: string[]) => void;
 };
 
-const emptyDetails: ChartDetails = {
+export const emptyDetails: ChartDetails = {
   firewallHostname: "",
   firewallSerialNumber: "",
   zone: "",
   firewallGroup: "",
 };
 
-export default function IP2Zone({ onLookupComplete }: IP2ZoneProps) {
-  const [sourceIp, setSourceIp] = useState("");
-  const [sourceIpName, setSourceIpName] = useState("");
-  const [sourceDetails, setSourceDetails] = useState<ChartDetails>(emptyDetails);
-
-  const [destIp, setDestIp] = useState("");
-  const [destIpName, setDestIpName] = useState("");
-  const [destDetails, setDestDetails] = useState<ChartDetails>(emptyDetails);
-
+export default function IP2Zone({
+  sourceIp,
+  onSourceIpChange,
+  sourceIpName,
+  onSourceIpNameChange,
+  sourceDetails,
+  onSourceDetailsChange,
+  destIp,
+  onDestIpChange,
+  destIpName,
+  onDestIpNameChange,
+  destDetails,
+  onDestDetailsChange,
+  onLookupComplete,
+}: IP2ZoneProps) {
   const [lookupLoading, setLookupLoading] = useState(false);
   const [cacheLoading, setCacheLoading] = useState(false);
 
@@ -123,8 +143,8 @@ export default function IP2Zone({ onLookupComplete }: IP2ZoneProps) {
     setLookupLoading(true);
 
     try {
-      setSourceDetails(emptyDetails);
-      setDestDetails(emptyDetails);
+      onSourceDetailsChange(emptyDetails);
+      onDestDetailsChange(emptyDetails);
       onLookupComplete?.([]);
 
       let resolvedSourceGroup = "";
@@ -135,14 +155,14 @@ export default function IP2Zone({ onLookupComplete }: IP2ZoneProps) {
         try {
           const result: ZoneByIpResult = await getZoneByIp(sIp);
           resolvedSourceGroup = result.deviceGroup;
-          setSourceDetails({
+          onSourceDetailsChange({
             firewallHostname: result.deviceHostname,
             firewallSerialNumber: result.deviceSerial,
             zone: result.zone,
             firewallGroup: result.deviceGroup,
           });
         } catch {
-          setSourceDetails(emptyDetails);
+          onSourceDetailsChange(emptyDetails);
         }
       }
 
@@ -151,14 +171,14 @@ export default function IP2Zone({ onLookupComplete }: IP2ZoneProps) {
         try {
           const result: ZoneByIpResult = await getZoneByIp(dIp);
           resolvedDestGroup = result.deviceGroup;
-          setDestDetails({
+          onDestDetailsChange({
             firewallHostname: result.deviceHostname,
             firewallSerialNumber: result.deviceSerial,
             zone: result.zone,
             firewallGroup: result.deviceGroup,
           });
         } catch {
-          setDestDetails(emptyDetails);
+          onDestDetailsChange(emptyDetails);
         }
       }
 
@@ -210,8 +230,8 @@ export default function IP2Zone({ onLookupComplete }: IP2ZoneProps) {
         <section className="panorama-chart-grid">
           <div className="panorama-chart-card">
             <IPChart
-              onIpChange={setSourceIp}
-              onIpNameChange={setSourceIpName}
+              onIpChange={onSourceIpChange}
+              onIpNameChange={onSourceIpNameChange}
               IPAddress={sourceIp}
               IPName={sourceIpName}
               ChartTitle="Source IP:"
@@ -224,8 +244,8 @@ export default function IP2Zone({ onLookupComplete }: IP2ZoneProps) {
 
           <div className="panorama-chart-card">
             <IPChart
-              onIpChange={setDestIp}
-              onIpNameChange={setDestIpName}
+              onIpChange={onDestIpChange}
+              onIpNameChange={onDestIpNameChange}
               IPAddress={destIp}
               IPName={destIpName}
               ChartTitle="Destination IP:"

@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { PanoramaPreRuleFieldsReducer } from './panorama-pre-rule-fields.feature';
+import { PanoramaPreRuleFieldsReducer } from './IPanoramaPreRuleFields.feature';
 
 export const store = configureStore({
     reducer: {

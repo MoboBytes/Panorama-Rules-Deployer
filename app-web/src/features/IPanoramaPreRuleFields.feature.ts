@@ -1,13 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction} from '@reduxjs/toolkit';
-import type { IPanoramaPreRuleFields } from '../contracts/panorama-pre-rule-fields.contract';
+import type { IPanoramaPreRuleFields } from '../contracts/IPanoramaPreRuleFields';
 
 interface IInitialState {
-    PanoramaPreRuleFields: IPanoramaPreRuleFields;
+    TrackerPanorama: IPanoramaPreRuleFields;
 }
 
 const initialState: IInitialState = {
-    PanoramaPreRuleFields: {
+    TrackerPanorama: {
         RuleName: '',
         ProfileSetting: '',
         To: '',
@@ -18,10 +18,10 @@ const initialState: IInitialState = {
         Service: '',
         GroupTag: '',
         Tag: '',
-        Action: '',
+        Action: 'Allow',
         LogSetting: '',
         LogStart: '',
-        LogEnd: '',
+        LogEnd: 'yes',
         Description: '',
         DeviceGroup: '',
         Requester: '',
@@ -36,7 +36,7 @@ const PanoramaPreRuleFieldsSlice = createSlice({
     initialState: initialState,
     reducers: {
         SetPanoramaPreRuleFields: (state, action: PayloadAction<IPanoramaPreRuleFields>) => {
-            state.PanoramaPreRuleFields = action.payload;
+            state.TrackerPanorama = action.payload;
         }
     }
 });

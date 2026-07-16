@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import InputLabel from "@mui/material/InputLabel";
@@ -33,16 +33,17 @@ import type {
 } from "../services/PanoramaCreateRule";
 import TicketNumber from "../components/TicketNumber";
 import NameField from "../components/NameTextField";
+import { PanoramaPreRuleFieldsAction } from '../features/IPanoramaPreRuleFields.feature.ts';
+import { useAppDispatch, useAppSelector } from '../hook';
 
 export default function CreateARule() {
+
+  const dispatch = useAppDispatch();
+  const panorama = useAppSelector((state) => state.PanoramaPreRuleFields.TrackerPanorama);
+
   const [trafficMode, setTrafficMode] = useState("automatic");
-  const [ruleName, setRuleName] = useState("");
-  const [ticketNumber, setTicketNumber] = useState("");
-  const [requesterName, setRequesterName] = useState("");
-  const [description, setDescription] = useState("");
 
   const [deviceGroups, setDeviceGroups] = useState<string[]>([]);
-  const [selectedDeviceGroup, setSelectedDeviceGroup] = useState("");
 
   const [tags, setTags] = useState<PanoramaTagEntry[]>([]);
   const [tagsLoading, setTagsLoading] = useState(false);
@@ -58,6 +59,7 @@ export default function CreateARule() {
   const [logForwardingProfilesData, setLogForwardingProfilesData] = useState<
     PanoramaLogForwardingProfileEntry[]
   >([]);
+
   const [logForwardingProfilesLoading, setLogForwardingProfilesLoading] =
     useState(false);
 
@@ -66,18 +68,17 @@ export default function CreateARule() {
   >([]);
   const [securityProfileGroupsLoading, setSecurityProfileGroupsLoading] =
     useState(false);
-
-  const [selectedLogProfile, setSelectedLogProfile] =
-    useState<TagOption | null>(null);
-  const [selectedLogPositions, setSelectedLogPositions] = useState<string[]>([
-    "end",
-  ]);
-
-  const [selectedAction, setSelectedAction] = useState("Allow");
+    
+  const selectedLogPositions = [
+  ...(panorama.LogStart === "yes" ? ["start"] : []),
+  ...(panorama.LogEnd === "yes" ? ["end"] : []),
+  ];
 
   const handleDeviceGroupChange = async (event: SelectChangeEvent) => {
     const nextDeviceGroup = event.target.value;
-    setSelectedDeviceGroup(nextDeviceGroup);
+
+    dispatch(PanoramaPreRuleFieldsAction.SetPanoramaPreRuleFields({ ...panorama, DeviceGroup: nextDeviceGroup }))
+    
     setTags([]);
     setApplications([]);
     setServices([]);
@@ -129,6 +130,7 @@ export default function CreateARule() {
   };
 
   const handleLookupComplete = async (groups: string[]) => {
+    
     setDeviceGroups(groups);
     setTags([]);
     setApplications([]);
@@ -138,7 +140,8 @@ export default function CreateARule() {
 
     if (groups.length === 1) {
       const autoSelectedGroup = groups[0];
-      setSelectedDeviceGroup(autoSelectedGroup);
+
+      dispatch(PanoramaPreRuleFieldsAction.SetPanoramaPreRuleFields({ ...panorama, DeviceGroup: autoSelectedGroup }))
 
       setTagsLoading(true);
       setApplicationsLoading(true);
@@ -179,7 +182,9 @@ export default function CreateARule() {
         setSecurityProfileGroupsLoading(false);
       }
     } else {
-      setSelectedDeviceGroup("");
+      dispatch(PanoramaPreRuleFieldsAction.SetPanoramaPreRuleFields({ ...panorama, DeviceGroup: "" }))
+      setSourceDetails(emptyChartDetails);
+      setDestDetails(emptyChartDetails);
     }
   };
 
@@ -203,12 +208,74 @@ export default function CreateARule() {
     })
   );
 
+  const selectedLogProfile =
+  logForwardingProfiles.find(
+    (profile) => profile.name === panorama.LogSetting
+  ) ?? null;
+
   const profileSettingOptions: TagOption[] = securityProfileGroups.map(
     (profileGroup) => ({
       name: profileGroup.name,
       location: profileGroup.location,
     })
   );
+
+//MultipleSelectCheckmarks Components: --------------------------------------------------------------------------
+  const selectedApplicationOptions: TagOption[] = applicationOptions.filter((app) =>
+  panorama.Application
+    .split(",")
+    .map((v) => v.trim())
+    .filter(Boolean)
+    .includes(app.name)
+);
+
+const selectedServiceOptions: TagOption[] = serviceOptions.filter((service) =>
+  panorama.Service
+    .split(",")
+    .map((v) => v.trim())
+    .filter(Boolean)
+    .includes(service.name)
+);
+
+const selectedTagOptions: TagOption[] = tags.filter((tag) =>
+  panorama.Tag
+    .split(",")
+    .map((v) => v.trim())
+    .filter(Boolean)
+    .includes(tag.name)
+);
+
+//SingleSelectCheckmark Components: --------------------------------------------------------------------------------
+const selectedProfileSetting =
+  profileSettingOptions.find((profile) => profile.name === panorama.ProfileSetting) ?? null;
+const selectedGroupTag = tags.find((tag) => tag.name === panorama.GroupTag) ?? null;
+
+//Automatically Generated Fields: -------------------------------------------------------------------------------------
+const generatedRuleName = [panorama.To, panorama.SourceName, "to", panorama.DestinationName, panorama.TicketNumber].filter(Boolean).join("-");
+const generatedDescription = ["Ticket:",panorama.TicketNumber,"Requestor:",panorama.Requester,"Purpose: To allow",panorama.SourceName,"to connect to",panorama.DestinationName,"using",panorama.Application,"on",panorama.Service,].filter(Boolean).join(" ");
+
+useEffect(() => {
+  if (trafficMode !== "automatic") return;
+
+  if (panorama.RuleName === generatedRuleName && panorama.Description === generatedDescription) return;
+
+  dispatch(PanoramaPreRuleFieldsAction.SetPanoramaPreRuleFields({
+    ...panorama,
+    RuleName: generatedRuleName,
+    Description: generatedDescription,
+  }));
+}, [trafficMode, generatedRuleName, generatedDescription, panorama, dispatch]);
+
+//IP2Zone Fields: ---------------------------------------------------------------------------------------------------------------
+const emptyChartDetails = {
+  firewallHostname: "",
+  firewallSerialNumber: "",
+  zone: "",
+  firewallGroup: "",
+};
+
+const [sourceDetails, setSourceDetails] = useState(emptyChartDetails);
+const [destDetails, setDestDetails] = useState(emptyChartDetails);
 
   return (
     <div className="create-rule">
@@ -255,13 +322,13 @@ export default function CreateARule() {
         </div>
 
         <TicketNumber
-          value={ticketNumber}
-          onChange={setTicketNumber}
+          value={panorama.TicketNumber}
+          onChange={(value) => dispatch(PanoramaPreRuleFieldsAction.SetPanoramaPreRuleFields({...panorama, TicketNumber: value,}))}
         />
 
         <NameField
-          value={requesterName}
-          onChange={setRequesterName}
+          value={panorama.Requester}
+          onChange={(value) => dispatch(PanoramaPreRuleFieldsAction.SetPanoramaPreRuleFields({...panorama, Requester: value,}))}
           title="Requester"
           label="Enter Requester Name"
         />
@@ -274,8 +341,8 @@ export default function CreateARule() {
           <Box className="create-rule__input-wrap">
             <TextField
               fullWidth
-              value={ruleName}
-              onChange={(e) => setRuleName(e.target.value)}
+              value={panorama.RuleName}
+              onChange={(e) => dispatch(PanoramaPreRuleFieldsAction.SetPanoramaPreRuleFields({ ...panorama, RuleName: e.target.value }))}
               className="create-rule__input"
               label="Enter Rule Name"
               variant="outlined"
@@ -294,8 +361,8 @@ export default function CreateARule() {
               fullWidth
               multiline
               minRows={3}
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              value={panorama.Description}
+              onChange={(e) => dispatch(PanoramaPreRuleFieldsAction.SetPanoramaPreRuleFields({ ...panorama, Description: e.target.value }))}
               className="create-rule__input"
               label="Enter Description"
               variant="outlined"
@@ -307,7 +374,21 @@ export default function CreateARule() {
         {trafficMode === "automatic" && (
           <>
             <div className="IP2ZoneWrapper">
-              <IP2Zone onLookupComplete={handleLookupComplete} />
+              <IP2Zone
+                sourceIp={panorama.Source}
+                onSourceIpChange={(value) => dispatch(PanoramaPreRuleFieldsAction.SetPanoramaPreRuleFields({ ...panorama, Source: value }))}
+                sourceIpName={panorama.SourceName}
+                onSourceIpNameChange={(value) => dispatch(PanoramaPreRuleFieldsAction.SetPanoramaPreRuleFields({ ...panorama, SourceName: value }))}
+                sourceDetails={sourceDetails}
+                onSourceDetailsChange={(value) => {setSourceDetails(value); dispatch(PanoramaPreRuleFieldsAction.SetPanoramaPreRuleFields({ ...panorama, From: value.zone }));}}
+                destIp={panorama.Destination}
+                onDestIpChange={(value) => dispatch(PanoramaPreRuleFieldsAction.SetPanoramaPreRuleFields({ ...panorama, Destination: value }))}
+                destIpName={panorama.DestinationName}
+                onDestIpNameChange={(value) => dispatch(PanoramaPreRuleFieldsAction.SetPanoramaPreRuleFields({ ...panorama, DestinationName: value }))}
+                destDetails={destDetails}
+                onDestDetailsChange={(value) => {setDestDetails(value); dispatch(PanoramaPreRuleFieldsAction.SetPanoramaPreRuleFields({ ...panorama, To: value.zone }));}}
+                onLookupComplete={handleLookupComplete}
+              />
             </div>
 
             <div className="create-rule__section">
@@ -324,10 +405,10 @@ export default function CreateARule() {
                     <Select
                       labelId="device-group-select-label"
                       id="device-group-select"
-                      value={selectedDeviceGroup}
+                      value={panorama.DeviceGroup}
                       label="Select Device Group"
                       onChange={handleDeviceGroupChange}
-                    >
+                      >
                       {deviceGroups.map((group) => (
                         <MenuItem key={group} value={group}>
                           {group}
@@ -347,7 +428,9 @@ export default function CreateARule() {
               <Box className="create-rule__input-wrap create-rule__multi-select">
                 <MultipleSelectCheckmarks
                   options={applicationOptions}
-                  disabled={!selectedDeviceGroup || applicationsLoading}
+                  value = {selectedApplicationOptions}
+                  onChange={(value) => dispatch(PanoramaPreRuleFieldsAction.SetPanoramaPreRuleFields({...panorama,Application: value.map((v) => v.name).join(", "),}))}
+                  disabled={!panorama.DeviceGroup || applicationsLoading}
                   label="Select Applications"
                 />
               </Box>
@@ -361,7 +444,9 @@ export default function CreateARule() {
               <Box className="create-rule__input-wrap create-rule__multi-select">
                 <MultipleSelectCheckmarks
                   options={serviceOptions}
-                  disabled={!selectedDeviceGroup || servicesLoading}
+                  value={selectedServiceOptions}
+                  onChange ={(value) => dispatch(PanoramaPreRuleFieldsAction.SetPanoramaPreRuleFields({...panorama,Service: value.map((v) => v.name).join(", "),}))}
+                  disabled={!panorama.DeviceGroup || servicesLoading}
                   label="Select Services"
                 />
               </Box>
@@ -375,7 +460,9 @@ export default function CreateARule() {
               <Box className="create-rule__input-wrap create-rule__multi-select">
                 <MultipleSelectCheckmarks
                   options={tags}
-                  disabled={!selectedDeviceGroup || tagsLoading}
+                  value={selectedTagOptions}
+                  onChange ={(value) => dispatch(PanoramaPreRuleFieldsAction.SetPanoramaPreRuleFields({...panorama,Tag: value.map((v) => v.name).join(", "),}))}
+                  disabled={!panorama.DeviceGroup || tagsLoading}
                 />
               </Box>
             </div>
@@ -388,7 +475,9 @@ export default function CreateARule() {
               <Box className="create-rule__input-wrap create-rule__multi-select">
                 <SingleSelectTag
                   options={tags}
-                  disabled={!selectedDeviceGroup || tagsLoading}
+                  disabled={!panorama.DeviceGroup || tagsLoading}
+                  value={selectedGroupTag}
+                  onChange={(value) => dispatch(PanoramaPreRuleFieldsAction.SetPanoramaPreRuleFields({...panorama,GroupTag: value?.name ?? "",}))}
                 />
               </Box>
             </div>
@@ -398,12 +487,11 @@ export default function CreateARule() {
                 <LogProfileStartEnd
                   tagOptions={logForwardingProfiles}
                   selectedTag={selectedLogProfile}
-                  onTagChange={setSelectedLogProfile}
+                  onTagChange={(value) => dispatch(PanoramaPreRuleFieldsAction.SetPanoramaPreRuleFields({...panorama,LogSetting: value?.name ?? "",}))}
                   selectedPositions={selectedLogPositions}
-                  onPositionChange={setSelectedLogPositions}
-                  tagDisabled={
-                    !selectedDeviceGroup || logForwardingProfilesLoading
-                  }
+                  onPositionChange={()=>{}}
+                  onLogPositionChange={(value) => dispatch(PanoramaPreRuleFieldsAction.SetPanoramaPreRuleFields({...panorama,LogStart: value.logStart,LogEnd: value.logEnd,}))}
+                  tagDisabled={!panorama.DeviceGroup || logForwardingProfilesLoading}
                   searchLabel="Enter Log Forwarding Profile"
                   searchPlaceholder="Search log forwarding profiles..."
                   helperText="Log Forwarding Profiles"
@@ -419,7 +507,16 @@ export default function CreateARule() {
               <Box className="create-rule__input-wrap create-rule__multi-select">
                 <SingleSelectTag
                   options={profileSettingOptions}
-                  disabled={!selectedDeviceGroup || securityProfileGroupsLoading}
+                  value={selectedProfileSetting}
+                  onChange={(value) =>
+                    dispatch(
+                      PanoramaPreRuleFieldsAction.SetPanoramaPreRuleFields({
+                        ...panorama,
+                        ProfileSetting: value?.name ?? "",
+                      })
+                    )
+                  }
+                  disabled={!panorama.DeviceGroup || securityProfileGroupsLoading}
                   label="Enter Security Profile Group"
                 />
               </Box>
@@ -432,16 +529,21 @@ export default function CreateARule() {
 
               <Box className="create-rule__input-wrap">
                 <div className="create-rule__input">
-                  <FormControl fullWidth disabled={!selectedDeviceGroup}>
+                  <FormControl fullWidth disabled={!panorama.DeviceGroup}>
                     <InputLabel id="action-select-label">
                       Select Action
                     </InputLabel>
                     <Select
                       labelId="action-select-label"
                       id="action-select"
-                      value={selectedAction}
+                      value={panorama.Action}
                       label="Select Action"
-                      onChange={(event) => setSelectedAction(event.target.value)}
+                      onChange={(event) => dispatch(
+                        PanoramaPreRuleFieldsAction.SetPanoramaPreRuleFields({
+                          ...panorama,
+                          Action: event.target.value
+                        })
+                      )}
                     >
                       <MenuItem value="Allow">Allow</MenuItem>
                       <MenuItem value="Deny">Deny</MenuItem>

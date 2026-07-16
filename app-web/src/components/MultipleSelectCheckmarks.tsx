@@ -17,6 +17,8 @@ export type TagOption = {
 
 type MultipleSelectCheckmarksProps = {
   options: TagOption[];
+  value?: TagOption[];
+  onChange?: (value: TagOption[]) => void;
   disabled?: boolean;
   label?: string;
   placeholder?: string;
@@ -24,19 +26,36 @@ type MultipleSelectCheckmarksProps = {
 
 export default function MultipleSelectCheckmarks({
   options,
+  value,
+  onChange,
   disabled = false,
   label = "Enter Tags",
   placeholder = "Search tags…",
 }: MultipleSelectCheckmarksProps) {
-  const [selectedTags, setSelectedTags] = React.useState<TagOption[]>([]);
+  const [internalSelectedTags, setInternalSelectedTags] = React.useState<
+    TagOption[]
+  >([]);
+
+  const selectedValues = value !== undefined ? value : internalSelectedTags;
+
+  const handleChange = (
+    _: React.SyntheticEvent,
+    newValue: TagOption[]
+  ) => {
+    if (value === undefined) {
+      setInternalSelectedTags(newValue);
+    }
+
+    onChange?.(newValue);
+  };
 
   return (
     <Autocomplete
       multiple
       id="tags-outlined"
       options={options}
-      value={selectedTags}
-      onChange={(_, newValue) => setSelectedTags(newValue)}
+      value={selectedValues}
+      onChange={handleChange}
       disableCloseOnSelect
       disabled={disabled}
       getOptionLabel={(option) => option.name}
@@ -72,11 +91,11 @@ export default function MultipleSelectCheckmarks({
       renderInput={(params) => (
         <TextField
           {...params}
-          label={selectedTags.length > 0 ? "" : label}
+          label={selectedValues.length > 0 ? "" : label}
           placeholder={
             disabled
               ? "Select a device group first"
-              : selectedTags.length > 0
+              : selectedValues.length > 0
               ? ""
               : placeholder
           }
