@@ -35,6 +35,7 @@ import TicketNumber from "../components/TicketNumber";
 import NameField from "../components/NameTextField";
 import { PanoramaPreRuleFieldsAction } from '../features/IPanoramaPreRuleFields.feature.ts';
 import { useAppDispatch, useAppSelector } from '../hook';
+import { createPanoramaPreRule } from "../services/PanoramaCreateRule";
 
 export default function CreateARule() {
 
@@ -77,7 +78,7 @@ export default function CreateARule() {
   const handleDeviceGroupChange = async (event: SelectChangeEvent) => {
     const nextDeviceGroup = event.target.value;
 
-    dispatch(PanoramaPreRuleFieldsAction.SetPanoramaPreRuleFields({ ...panorama, DeviceGroup: nextDeviceGroup }))
+    dispatch(PanoramaPreRuleFieldsAction.SetPanoramaPreRuleField({ field: "DeviceGroup", value: nextDeviceGroup }))
     
     setTags([]);
     setApplications([]);
@@ -141,7 +142,7 @@ export default function CreateARule() {
     if (groups.length === 1) {
       const autoSelectedGroup = groups[0];
 
-      dispatch(PanoramaPreRuleFieldsAction.SetPanoramaPreRuleFields({ ...panorama, DeviceGroup: autoSelectedGroup }))
+      dispatch(PanoramaPreRuleFieldsAction.SetPanoramaPreRuleField({ field: "DeviceGroup", value: autoSelectedGroup }))
 
       setTagsLoading(true);
       setApplicationsLoading(true);
@@ -182,11 +183,24 @@ export default function CreateARule() {
         setSecurityProfileGroupsLoading(false);
       }
     } else {
-      dispatch(PanoramaPreRuleFieldsAction.SetPanoramaPreRuleFields({ ...panorama, DeviceGroup: "" }))
-      setSourceDetails(emptyChartDetails);
-      setDestDetails(emptyChartDetails);
+      dispatch(PanoramaPreRuleFieldsAction.SetPanoramaPreRuleField({ field: "DeviceGroup", value: "" }))
+      //setSourceDetails(emptyChartDetails); causes bug to make generated fields disappear from chart
+      //setDestDetails(emptyChartDetails);
     }
   };
+
+  //IP2Zone Fields: ---------------------------------------------------------------------------------------------------------------
+const emptyChartDetails = {
+  firewallHostname: "",
+  firewallSerialNumber: "",
+  zone: "",
+  firewallGroup: "",
+};
+
+const [sourceDetails, setSourceDetails] = useState(emptyChartDetails);
+const [destDetails, setDestDetails] = useState(emptyChartDetails);
+
+// --------------------------------------------------------------------------------------------------------------------------------
 
   const applicationOptions: TagOption[] = applications.map((application) => ({
     name: application.name,
@@ -251,31 +265,65 @@ const selectedProfileSetting =
 const selectedGroupTag = tags.find((tag) => tag.name === panorama.GroupTag) ?? null;
 
 //Automatically Generated Fields: -------------------------------------------------------------------------------------
-const generatedRuleName = [panorama.To, panorama.SourceName, "to", panorama.DestinationName, panorama.TicketNumber].filter(Boolean).join("-");
+const generatedRuleName = [panorama.From, panorama.SourceName, "to", panorama.DestinationName, panorama.TicketNumber].filter(Boolean).join("-");
 const generatedDescription = ["Ticket:",panorama.TicketNumber,"Requestor:",panorama.Requester,"Purpose: To allow",panorama.SourceName,"to connect to",panorama.DestinationName,"using",panorama.Application,"on",panorama.Service,].filter(Boolean).join(" ");
 
 useEffect(() => {
   if (trafficMode !== "automatic") return;
 
-  if (panorama.RuleName === generatedRuleName && panorama.Description === generatedDescription) return;
+  if (panorama.RuleName !== generatedRuleName) {
+    dispatch(PanoramaPreRuleFieldsAction.SetPanoramaPreRuleField({ field: "RuleName", value: generatedRuleName }));
+  }
 
-  dispatch(PanoramaPreRuleFieldsAction.SetPanoramaPreRuleFields({
-    ...panorama,
-    RuleName: generatedRuleName,
-    Description: generatedDescription,
-  }));
-}, [trafficMode, generatedRuleName, generatedDescription, panorama, dispatch]);
+  if (panorama.Description !== generatedDescription) {
+    dispatch(PanoramaPreRuleFieldsAction.SetPanoramaPreRuleField({ field: "Description", value: generatedDescription }));
+  }
+}, [trafficMode, generatedRuleName, generatedDescription, panorama.RuleName, panorama.Description, dispatch]);
 
-//IP2Zone Fields: ---------------------------------------------------------------------------------------------------------------
-const emptyChartDetails = {
-  firewallHostname: "",
-  firewallSerialNumber: "",
-  zone: "",
-  firewallGroup: "",
+//All these pertain to submitting the form to the backend + button functionality: ---------------------------------------------------
+const createPreRulePayload = {
+  ruleName: panorama.RuleName,
+  description: panorama.Description,
+  deviceGroup: panorama.DeviceGroup,
+  from: panorama.From,
+  to: panorama.To,
+  source: panorama.Source,
+  destination: panorama.Destination,
+  application: panorama.Application.split(",").map((v) => v.trim()).filter(Boolean),
+  service: panorama.Service.split(",").map((v) => v.trim()).filter(Boolean),
+  tag: panorama.Tag.split(",").map((v) => v.trim()).filter(Boolean),
+  groupTag: panorama.GroupTag,
+  action: panorama.Action,
+  logSetting: panorama.LogSetting,
+  logStart: panorama.LogStart,
+  logEnd: panorama.LogEnd,
+  profileSetting: panorama.ProfileSetting,
+  requester: panorama.Requester,
+  ticketNumber: panorama.TicketNumber,
+  sourceName: panorama.SourceName,
+  destinationName: panorama.DestinationName,
 };
 
-const [sourceDetails, setSourceDetails] = useState(emptyChartDetails);
-const [destDetails, setDestDetails] = useState(emptyChartDetails);
+const [submitLoading, setSubmitLoading] = useState(false);
+const [submitMessage, setSubmitMessage] = useState("");
+
+const handleSubmitPreRule = async () => {
+
+  console.log("PANORAMA BEFORE SUBMIT", panorama);
+  console.log("PAYLOAD BEFORE SUBMIT", createPreRulePayload);
+  setSubmitLoading(true);
+  setSubmitMessage("");
+
+  try {
+    const result = await createPanoramaPreRule(createPreRulePayload);
+    setSubmitMessage(result.message || "Pre-rule submitted successfully.");
+    console.log("Create pre-rule response:", result);
+  } catch (error) {
+    setSubmitMessage(error instanceof Error ? error.message : "Failed to submit pre-rule.");
+  } finally {
+    setSubmitLoading(false);
+  }
+};
 
   return (
     <div className="create-rule">
@@ -376,17 +424,25 @@ const [destDetails, setDestDetails] = useState(emptyChartDetails);
             <div className="IP2ZoneWrapper">
               <IP2Zone
                 sourceIp={panorama.Source}
-                onSourceIpChange={(value) => dispatch(PanoramaPreRuleFieldsAction.SetPanoramaPreRuleFields({ ...panorama, Source: value }))}
+                onSourceIpChange={(value) => dispatch(PanoramaPreRuleFieldsAction.SetPanoramaPreRuleField({ field: "Source", value }))}
                 sourceIpName={panorama.SourceName}
-                onSourceIpNameChange={(value) => dispatch(PanoramaPreRuleFieldsAction.SetPanoramaPreRuleFields({ ...panorama, SourceName: value }))}
+                onSourceIpNameChange={(value) => dispatch(PanoramaPreRuleFieldsAction.SetPanoramaPreRuleField({ field: "SourceName", value }))}
                 sourceDetails={sourceDetails}
-                onSourceDetailsChange={(value) => {setSourceDetails(value); dispatch(PanoramaPreRuleFieldsAction.SetPanoramaPreRuleFields({ ...panorama, From: value.zone }));}}
+                onSourceDetailsChange={(value) => {
+                  console.log("SOURCE DETAILS", value);
+                  setSourceDetails(value);
+                  dispatch(PanoramaPreRuleFieldsAction.SetPanoramaPreRuleField({ field: "From", value: value.zone }));
+                }}
                 destIp={panorama.Destination}
-                onDestIpChange={(value) => dispatch(PanoramaPreRuleFieldsAction.SetPanoramaPreRuleFields({ ...panorama, Destination: value }))}
+                onDestIpChange={(value) => dispatch(PanoramaPreRuleFieldsAction.SetPanoramaPreRuleField({ field: "Destination", value }))}
                 destIpName={panorama.DestinationName}
-                onDestIpNameChange={(value) => dispatch(PanoramaPreRuleFieldsAction.SetPanoramaPreRuleFields({ ...panorama, DestinationName: value }))}
+                onDestIpNameChange={(value) => dispatch(PanoramaPreRuleFieldsAction.SetPanoramaPreRuleField({ field: "DestinationName", value }))}
                 destDetails={destDetails}
-                onDestDetailsChange={(value) => {setDestDetails(value); dispatch(PanoramaPreRuleFieldsAction.SetPanoramaPreRuleFields({ ...panorama, To: value.zone }));}}
+                onDestDetailsChange={(value) => {
+                  console.log("DEST DETAILS", value);
+                  setDestDetails(value);
+                  dispatch(PanoramaPreRuleFieldsAction.SetPanoramaPreRuleField({ field: "To", value: value.zone }));
+                }}
                 onLookupComplete={handleLookupComplete}
               />
             </div>
@@ -551,6 +607,14 @@ const [destDetails, setDestDetails] = useState(emptyChartDetails);
                   </FormControl>
                 </div>
               </Box>
+            </div>
+              <div className="create-rule__section">
+                <Box className="create-rule__input-wrap">
+                  <button type="button" onClick={handleSubmitPreRule} disabled={submitLoading}>
+                    {submitLoading ? "Submitting..." : "Submit Pre-Rule"}
+                  </button>
+                </Box>
+                {submitMessage && <p>{submitMessage}</p>}
             </div>
           </>
         )}

@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import type { PayloadAction} from '@reduxjs/toolkit';
+import type { PayloadAction } from '@reduxjs/toolkit';
 import type { IPanoramaPreRuleFields } from '../contracts/IPanoramaPreRuleFields';
 
 interface IInitialState {
@@ -20,7 +20,7 @@ const initialState: IInitialState = {
         Tag: '',
         Action: 'Allow',
         LogSetting: '',
-        LogStart: '',
+        LogStart: 'no',
         LogEnd: 'yes',
         Description: '',
         DeviceGroup: '',
@@ -37,6 +37,12 @@ const PanoramaPreRuleFieldsSlice = createSlice({
     reducers: {
         SetPanoramaPreRuleFields: (state, action: PayloadAction<IPanoramaPreRuleFields>) => {
             state.TrackerPanorama = action.payload;
+        },
+        SetPanoramaPreRuleField: (
+            state,
+            action: PayloadAction<{ field: keyof IPanoramaPreRuleFields; value: string }>
+        ) => {
+            state.TrackerPanorama[action.payload.field] = action.payload.value;
         }
     }
 });

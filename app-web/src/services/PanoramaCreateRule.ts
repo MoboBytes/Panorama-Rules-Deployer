@@ -153,3 +153,53 @@ export async function getAllPanoramaApplications(
 
   return (await response.json()) as PanoramaApplicationEntry[];
 }
+
+// ---------------- Create Pre-Rule Types ----------------
+
+export type CreatePanoramaPreRuleRequest = {
+  ruleName: string;
+  description: string;
+  deviceGroup: string;
+  from: string;
+  to: string;
+  source: string;
+  destination: string;
+  application: string[];
+  service: string[];
+  tag: string[];
+  groupTag: string;
+  action: string;
+  logSetting: string;
+  logStart: string;
+  logEnd: string;
+  profileSetting: string;
+  requester: string;
+  ticketNumber: string;
+  sourceName: string;
+  destinationName: string;
+};
+
+export type CreatePanoramaPreRuleResponse = {
+  message: string;
+  deviceGroup: string;
+  payload: unknown;
+};
+
+// ---------------- Create Pre-Rule API ----------------
+
+export async function createPanoramaPreRule(
+  request: CreatePanoramaPreRuleRequest
+): Promise<CreatePanoramaPreRuleResponse> {
+  const response = await fetch(`${BACKEND_BASE_URL}/api/CreatePreRule`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(request),
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(text || "Failed to create Panorama pre-rule");
+  }
+
+  return (await response.json()) as CreatePanoramaPreRuleResponse;
+}
