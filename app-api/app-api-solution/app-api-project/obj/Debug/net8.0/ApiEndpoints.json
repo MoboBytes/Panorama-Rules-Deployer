@@ -32,6 +32,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "PanoramaBackend.Controllers.CreatePreRuleController",
+    "Method": "CreatePreRule",
+    "RelativePath": "api/CreatePreRule",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "PanoramaBackend.Controllers.CreatePreRuleController\u002BCreatePreRuleRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "PanoramaBackend.Controllers.CreateProfileSettingsController",
     "Method": "GetAllProfileSettings",
     "RelativePath": "api/CreateProfileSettings/all",

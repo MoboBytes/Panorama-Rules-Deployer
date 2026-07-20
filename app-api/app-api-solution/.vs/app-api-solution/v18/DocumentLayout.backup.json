@@ -3,6 +3,18 @@
   "WorkspaceRootPath": "C:\\Users\\JESQUEDA\\Documents\\Code\\paronama_rules\\app-api\\app-api-solution\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{49AA7812-4484-4D4C-9493-9F289D6F0A21}|app-api-project\\app-api-project.csproj|c:\\users\\jesqueda\\documents\\code\\paronama_rules\\app-api\\app-api-solution\\app-api-project\\controllers\\createprerulecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{49AA7812-4484-4D4C-9493-9F289D6F0A21}|app-api-project\\app-api-project.csproj|solutionrelative:app-api-project\\controllers\\createprerulecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{49AA7812-4484-4D4C-9493-9F289D6F0A21}|app-api-project\\app-api-project.csproj|c:\\users\\jesqueda\\documents\\code\\paronama_rules\\app-api\\app-api-solution\\app-api-project\\controllers\\panoramaiptozonefinder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{49AA7812-4484-4D4C-9493-9F289D6F0A21}|app-api-project\\app-api-project.csproj|solutionrelative:app-api-project\\controllers\\panoramaiptozonefinder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{49AA7812-4484-4D4C-9493-9F289D6F0A21}|app-api-project\\app-api-project.csproj|c:\\users\\jesqueda\\documents\\code\\paronama_rules\\app-api\\app-api-solution\\app-api-project\\contracts\\panoramaprerulefields.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{49AA7812-4484-4D4C-9493-9F289D6F0A21}|app-api-project\\app-api-project.csproj|solutionrelative:app-api-project\\contracts\\panoramaprerulefields.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{49AA7812-4484-4D4C-9493-9F289D6F0A21}|app-api-project\\app-api-project.csproj|c:\\users\\jesqueda\\documents\\code\\paronama_rules\\app-api\\app-api-solution\\app-api-project\\controllers\\createapplicationcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{49AA7812-4484-4D4C-9493-9F289D6F0A21}|app-api-project\\app-api-project.csproj|solutionrelative:app-api-project\\controllers\\createapplicationcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -17,10 +29,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{49AA7812-4484-4D4C-9493-9F289D6F0A21}|app-api-project\\app-api-project.csproj|c:\\users\\jesqueda\\documents\\code\\paronama_rules\\app-api\\app-api-solution\\app-api-project\\controllers\\createlogforwardingprofilescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{49AA7812-4484-4D4C-9493-9F289D6F0A21}|app-api-project\\app-api-project.csproj|solutionrelative:app-api-project\\controllers\\createlogforwardingprofilescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{49AA7812-4484-4D4C-9493-9F289D6F0A21}|app-api-project\\app-api-project.csproj|c:\\users\\jesqueda\\documents\\code\\paronama_rules\\app-api\\app-api-solution\\app-api-project\\models\\panoramaprerulefields.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{49AA7812-4484-4D4C-9493-9F289D6F0A21}|app-api-project\\app-api-project.csproj|solutionrelative:app-api-project\\models\\panoramaprerulefields.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{49AA7812-4484-4D4C-9493-9F289D6F0A21}|app-api-project\\app-api-project.csproj|c:\\users\\jesqueda\\documents\\code\\paronama_rules\\app-api\\app-api-solution\\app-api-project\\controllers\\createtagscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -39,19 +47,32 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "CreateApplicationController.cs",
-              "DocumentMoniker": "C:\\Users\\JESQUEDA\\Documents\\Code\\paronama_rules\\app-api\\app-api-solution\\app-api-project\\Controllers\\CreateApplicationController.cs",
-              "RelativeDocumentMoniker": "app-api-project\\Controllers\\CreateApplicationController.cs",
-              "ToolTip": "C:\\Users\\JESQUEDA\\Documents\\Code\\paronama_rules\\app-api\\app-api-solution\\app-api-project\\Controllers\\CreateApplicationController.cs",
-              "RelativeToolTip": "app-api-project\\Controllers\\CreateApplicationController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAM4AAAAyAAAAAAAAAA==",
+              "Title": "CreatePreRuleController.cs",
+              "DocumentMoniker": "C:\\Users\\JESQUEDA\\Documents\\Code\\paronama_rules\\app-api\\app-api-solution\\app-api-project\\Controllers\\CreatePreRuleController.cs",
+              "RelativeDocumentMoniker": "app-api-project\\Controllers\\CreatePreRuleController.cs",
+              "ToolTip": "C:\\Users\\JESQUEDA\\Documents\\Code\\paronama_rules\\app-api\\app-api-solution\\app-api-project\\Controllers\\CreatePreRuleController.cs",
+              "RelativeToolTip": "app-api-project\\Controllers\\CreatePreRuleController.cs",
+              "ViewState": "AgIAAFEAAAAAAAAAAAAuwF0AAAAzAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-08T19:58:42.905Z",
+              "WhenOpened": "2026-07-16T14:19:43.706Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 1,
+              "Title": "PanoramaIPtoZoneFinder.cs",
+              "DocumentMoniker": "C:\\Users\\JESQUEDA\\Documents\\Code\\paronama_rules\\app-api\\app-api-solution\\app-api-project\\Controllers\\PanoramaIPtoZoneFinder.cs",
+              "RelativeDocumentMoniker": "app-api-project\\Controllers\\PanoramaIPtoZoneFinder.cs",
+              "ToolTip": "C:\\Users\\JESQUEDA\\Documents\\Code\\paronama_rules\\app-api\\app-api-solution\\app-api-project\\Controllers\\PanoramaIPtoZoneFinder.cs",
+              "RelativeToolTip": "app-api-project\\Controllers\\PanoramaIPtoZoneFinder.cs",
+              "ViewState": "AgIAAOoAAAAAAAAAAAAqwPwAAABVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-09T14:14:32.947Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
               "Title": "CreateLogForwardingProfilesController.cs",
               "DocumentMoniker": "C:\\Users\\JESQUEDA\\Documents\\Code\\paronama_rules\\app-api\\app-api-solution\\app-api-project\\Controllers\\CreateLogForwardingProfilesController.cs",
               "RelativeDocumentMoniker": "app-api-project\\Controllers\\CreateLogForwardingProfilesController.cs",
@@ -63,19 +84,32 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 2,
               "Title": "PanoramaPreRuleFields.cs",
-              "DocumentMoniker": "C:\\Users\\JESQUEDA\\Documents\\Code\\paronama_rules\\app-api\\app-api-solution\\app-api-project\\Models\\PanoramaPreRuleFields.cs",
-              "RelativeDocumentMoniker": "app-api-project\\Models\\PanoramaPreRuleFields.cs",
-              "ToolTip": "C:\\Users\\JESQUEDA\\Documents\\Code\\paronama_rules\\app-api\\app-api-solution\\app-api-project\\Models\\PanoramaPreRuleFields.cs",
-              "RelativeToolTip": "app-api-project\\Models\\PanoramaPreRuleFields.cs",
-              "ViewState": "AgIAAAQAAAAAAAAAAAA1wAsAAAAhAAAAAAAAAA==",
+              "DocumentMoniker": "C:\\Users\\JESQUEDA\\Documents\\Code\\paronama_rules\\app-api\\app-api-solution\\app-api-project\\Contracts\\PanoramaPreRuleFields.cs",
+              "RelativeDocumentMoniker": "app-api-project\\Contracts\\PanoramaPreRuleFields.cs",
+              "ToolTip": "C:\\Users\\JESQUEDA\\Documents\\Code\\paronama_rules\\app-api\\app-api-solution\\app-api-project\\Contracts\\PanoramaPreRuleFields.cs",
+              "RelativeToolTip": "app-api-project\\Contracts\\PanoramaPreRuleFields.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAA6AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-08T19:36:10.212Z"
+              "WhenOpened": "2026-07-08T19:36:10.212Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
+              "Title": "CreateApplicationController.cs",
+              "DocumentMoniker": "C:\\Users\\JESQUEDA\\Documents\\Code\\paronama_rules\\app-api\\app-api-solution\\app-api-project\\Controllers\\CreateApplicationController.cs",
+              "RelativeDocumentMoniker": "app-api-project\\Controllers\\CreateApplicationController.cs",
+              "ToolTip": "C:\\Users\\JESQUEDA\\Documents\\Code\\paronama_rules\\app-api\\app-api-solution\\app-api-project\\Controllers\\CreateApplicationController.cs",
+              "RelativeToolTip": "app-api-project\\Controllers\\CreateApplicationController.cs",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAowM4AAAAyAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-08T19:58:42.905Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
               "Title": "CreateServiceController.cs",
               "DocumentMoniker": "C:\\Users\\JESQUEDA\\Documents\\Code\\paronama_rules\\app-api\\app-api-solution\\app-api-project\\Controllers\\CreateServiceController.cs",
               "RelativeDocumentMoniker": "app-api-project\\Controllers\\CreateServiceController.cs",
@@ -87,7 +121,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 5,
               "Title": "CreateProfileSettingController.cs",
               "DocumentMoniker": "C:\\Users\\JESQUEDA\\Documents\\Code\\paronama_rules\\app-api\\app-api-solution\\app-api-project\\Controllers\\CreateProfileSettingController.cs",
               "RelativeDocumentMoniker": "app-api-project\\Controllers\\CreateProfileSettingController.cs",
@@ -99,7 +133,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 7,
               "Title": "CreateTagsController.cs",
               "DocumentMoniker": "C:\\Users\\JESQUEDA\\Documents\\Code\\paronama_rules\\app-api\\app-api-solution\\app-api-project\\Controllers\\CreateTagsController.cs",
               "RelativeDocumentMoniker": "app-api-project\\Controllers\\CreateTagsController.cs",

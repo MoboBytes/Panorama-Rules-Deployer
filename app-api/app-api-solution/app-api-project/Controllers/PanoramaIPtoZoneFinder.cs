@@ -126,7 +126,16 @@ namespace PanoramaBackend.Controllers
 
             if (!results.Any())
             {
-                return NotFound($"No non-generic zone found for IP {request.Ip}");
+                return Ok(new ZoneByIpResult
+                {
+                    DeviceSerial = "Not Applicable",
+                    DeviceHostname = "Not Applicable",
+                    DeviceIpAddress = "Not Applicable",
+                    DeviceGroup = "Not Applicable",
+                    VirtualRouter = "Not Applicable",
+                    EgressInterface = "Not Applicable",
+                    Zone = "inside"
+                });
             }
 
             // Any returned result is already guaranteed to be valid
@@ -236,10 +245,13 @@ namespace PanoramaBackend.Controllers
 
         private static bool IsSkippedZone(string zone)
         {
-            return string.Equals(zone, "inside", StringComparison.OrdinalIgnoreCase)
-                || string.Equals(zone, "outside", StringComparison.OrdinalIgnoreCase)
-                || string.Equals(zone, "extranet-firewall", StringComparison.OrdinalIgnoreCase)
-                || string.Equals(zone, "internet", StringComparison.OrdinalIgnoreCase);
+            return
+                string.Equals(zone, "inside", StringComparison.OrdinalIgnoreCase)
+            || string.Equals(zone, "extranet-firewall", StringComparison.OrdinalIgnoreCase)
+            || string.Equals(zone, "abs", StringComparison.OrdinalIgnoreCase);
+            //|| string.Equals(zone, "outside", StringComparison.OrdinalIgnoreCase)
+            //|| string.Equals(zone, "internet", StringComparison.OrdinalIgnoreCase);
+
         }
     }
 }
