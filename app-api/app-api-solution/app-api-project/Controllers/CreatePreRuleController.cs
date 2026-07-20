@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Text;
+using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using PanoramaBackend.Services;
 
@@ -12,10 +16,14 @@ namespace PanoramaBackend.Controllers
     public class CreatePreRuleController : ControllerBase
     {
         private readonly PanoramaSessionCache _sessionCache;
+        private readonly IHttpClientFactory _httpClientFactory;
 
-        public CreatePreRuleController(PanoramaSessionCache sessionCache)
+        public CreatePreRuleController(
+            PanoramaSessionCache sessionCache,
+            IHttpClientFactory httpClientFactory)
         {
             _sessionCache = sessionCache;
+            _httpClientFactory = httpClientFactory;
         }
 
         // ---------------- Request DTO ----------------
@@ -69,11 +77,23 @@ namespace PanoramaBackend.Controllers
             [JsonPropertyName("source")]
             public MemberContainer Source { get; set; } = new();
 
+            [JsonPropertyName("source-user")]
+            public MemberContainer SourceUser { get; set; } = new()
+            {
+                Member = new List<string> { "any" }
+            };
+
             [JsonPropertyName("destination")]
             public MemberContainer Destination { get; set; } = new();
 
             [JsonPropertyName("service")]
             public MemberContainer Service { get; set; } = new();
+
+            [JsonPropertyName("category")]
+            public MemberContainer Category { get; set; } = new()
+            {
+                Member = new List<string> { "any" }
+            };
 
             [JsonPropertyName("application")]
             public MemberContainer Application { get; set; } = new();
@@ -90,15 +110,6 @@ namespace PanoramaBackend.Controllers
             [JsonPropertyName("action")]
             public string Action { get; set; } = "allow";
 
-            [JsonPropertyName("log-setting")]
-            public string? LogSetting { get; set; }
-
-            [JsonPropertyName("log-start")]
-            public string LogStart { get; set; } = "no";
-
-            [JsonPropertyName("log-end")]
-            public string LogEnd { get; set; } = "yes";
-
             [JsonPropertyName("disabled")]
             public string Disabled { get; set; } = "no";
 
@@ -111,17 +122,14 @@ namespace PanoramaBackend.Controllers
             [JsonPropertyName("rule-type")]
             public string RuleType { get; set; } = "universal";
 
-            [JsonPropertyName("category")]
-            public MemberContainer Category { get; set; } = new()
-            {
-                Member = new List<string> { "any" }
-            };
+            [JsonPropertyName("log-setting")]
+            public string? LogSetting { get; set; }
 
-            [JsonPropertyName("source-user")]
-            public MemberContainer SourceUser { get; set; } = new()
-            {
-                Member = new List<string> { "any" }
-            };
+            [JsonPropertyName("log-start")]
+            public string LogStart { get; set; } = "no";
+
+            [JsonPropertyName("log-end")]
+            public string LogEnd { get; set; } = "yes";
 
             [JsonPropertyName("profile-setting")]
             public ProfileSettingContainer? ProfileSetting { get; set; }
@@ -142,7 +150,7 @@ namespace PanoramaBackend.Controllers
         // ---------------- Public Endpoint ----------------
 
         [HttpPost]
-        public IActionResult CreatePreRule([FromBody] CreatePreRuleRequest request)
+        public async Task<IActionResult> CreatePreRule([FromBody] CreatePreRuleRequest request)
         {
             if (!_sessionCache.HasValidSession)
             {
@@ -161,13 +169,75 @@ namespace PanoramaBackend.Controllers
 
             var payload = BuildPanoramaPayload(request);
 
-            // For now, return the payload so you can verify it from the frontend.
-            // Next step will be submitting this payload to Panorama.
+            var host = _sessionCache.Host;
+            var apiKey = _sessionCache.BearerToken;
+
+            if (string.IsNullOrWhiteSpace(host))
+            {
+                return BadRequest("Panorama host is not available.");
+            }
+
+            if (string.IsNullOrWhiteSpace(apiKey))
+            {
+                return BadRequest("Panorama API key is not available.");
+            }
+
+            var baseUri = host.EndsWith("/")
+                ? host.TrimEnd('/')
+                : host;
+
+            var endpoint =
+                $"{baseUri}/restapi/v11.2/Policies/SecurityPreRules" +
+                $"?name={Uri.EscapeDataString(request.RuleName)}" +
+                $"&location=device-group" +
+                $"&device-group={Uri.EscapeDataString(request.DeviceGroup)}" +
+                $"&input-format=json" +
+                $"&output-format=json";
+
+            var jsonOptions = new JsonSerializerOptions
+            {
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+            };
+
+            var requestJson = JsonSerializer.Serialize(payload, jsonOptions);
+
+            var client = _httpClientFactory.CreateClient();
+
+            using var httpRequest = new HttpRequestMessage(HttpMethod.Post, endpoint);
+            httpRequest.Headers.Add("X-PAN-KEY", apiKey);
+            httpRequest.Headers.Accept.ParseAdd("application/json");
+            httpRequest.Content = new StringContent(requestJson, Encoding.UTF8, "application/json");
+
+            var response = await client.SendAsync(httpRequest);
+            var responseBody = await response.Content.ReadAsStringAsync();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                return StatusCode((int)response.StatusCode, new
+                {
+                    message = "Panorama pre-rule creation failed.",
+                    panoramaStatusCode = (int)response.StatusCode,
+                    panoramaResponse = responseBody,
+                    endpoint
+                });
+            }
+
+            object? parsedPanoramaResponse = null;
+            try
+            {
+                parsedPanoramaResponse = JsonSerializer.Deserialize<object>(responseBody);
+            }
+            catch
+            {
+                parsedPanoramaResponse = responseBody;
+            }
+
             return Ok(new
             {
-                message = "Payload built successfully.",
+                message = "Panorama pre-rule created successfully.",
                 deviceGroup = request.DeviceGroup,
-                payload
+                ruleName = request.RuleName,
+                panoramaResponse = parsedPanoramaResponse
             });
         }
 
@@ -209,6 +279,21 @@ namespace PanoramaBackend.Controllers
 
         private static PanoramaRulePayload BuildPanoramaPayload(CreatePreRuleRequest request)
         {
+            var cleanedApplications = request.Application
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .ToList();
+
+            var cleanedServices = request.Service
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .ToList();
+
+            var cleanedTags = request.Tag
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .ToList();
+
             var payload = new PanoramaRulePayload
             {
                 Entry = new PanoramaRuleEntry
@@ -216,6 +301,10 @@ namespace PanoramaBackend.Controllers
                     Name = request.RuleName,
                     Description = request.Description,
                     Action = request.Action.ToLowerInvariant(),
+                    Disabled = "no",
+                    NegateSource = "no",
+                    NegateDestination = "no",
+                    RuleType = "universal",
                     LogStart = NormalizeYesNo(request.LogStart, "no"),
                     LogEnd = NormalizeYesNo(request.LogEnd, "yes"),
 
@@ -235,27 +324,24 @@ namespace PanoramaBackend.Controllers
                     {
                         Member = new List<string> { request.Destination }
                     },
-                    Application = new MemberContainer
-                    {
-                        Member = request.Application
-                            .Where(x => !string.IsNullOrWhiteSpace(x))
-                            .Distinct(StringComparer.OrdinalIgnoreCase)
-                            .ToList()
-                    },
                     Service = new MemberContainer
                     {
-                        Member = request.Service
-                            .Where(x => !string.IsNullOrWhiteSpace(x))
-                            .Distinct(StringComparer.OrdinalIgnoreCase)
-                            .ToList()
+                        Member = cleanedServices
+                    },
+                    Category = new MemberContainer
+                    {
+                        Member = new List<string> { "any" }
+                    },
+                    Application = new MemberContainer
+                    {
+                        Member = cleanedApplications
+                    },
+                    SourceUser = new MemberContainer
+                    {
+                        Member = new List<string> { "any" }
                     }
                 }
             };
-
-            var cleanedTags = request.Tag
-                .Where(x => !string.IsNullOrWhiteSpace(x))
-                .Distinct(StringComparer.OrdinalIgnoreCase)
-                .ToList();
 
             if (cleanedTags.Any())
             {
