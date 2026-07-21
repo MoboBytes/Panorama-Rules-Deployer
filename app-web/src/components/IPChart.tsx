@@ -4,17 +4,19 @@ import {
   List,
   ListItem,
   ListItemText,
-  TextField,
   Typography,
 } from "@mui/material";
 import DnsIcon from "@mui/icons-material/Dns";
 import LanIcon from "@mui/icons-material/Lan";
 import TagIcon from "@mui/icons-material/Tag";
 import NameField from "./NameTextField";
+import IPTextField from "./IPTextField";
 
 type IPChartProps = {
   onIpChange: (value: string) => void;
   onIpNameChange: (value: string) => void;
+  onIpErrorChange?: (errorMessage: string) => void;
+  onIpNameErrorChange?: (errorMessage: string) => void;
   ChartTitle: string;
   IPAddress: string;
   IPName: string;
@@ -27,6 +29,8 @@ type IPChartProps = {
 export const IPChart: React.FC<IPChartProps> = ({
   onIpChange,
   onIpNameChange,
+  onIpErrorChange,
+  onIpNameErrorChange,
   IPAddress,
   IPName,
   ChartTitle,
@@ -41,22 +45,20 @@ export const IPChart: React.FC<IPChartProps> = ({
         <Typography className="ipchart__title">{ChartTitle}</Typography>
       </Box>
 
-      <Box className="ipchart__input-wrap">
-        <TextField
-          fullWidth
-          label="IPv4 Address"
-          value={IPAddress}
-          onChange={(e) => onIpChange(e.target.value)}
-          variant="outlined"
-          className="ipchart__input"
-        />
-      </Box>
+      <IPTextField
+        value={IPAddress}
+        onChange={onIpChange}
+        onErrorChange={onIpErrorChange}
+        title="IPv4 Address"
+        label="Enter IPv4 Address or Subnet"
+      />
 
       <NameField
-                value={IPName}
-                onChange={onIpNameChange}
-                title="IP Name"
-                label="Enter IP Name"
+        value={IPName}
+        onChange={onIpNameChange}
+        onErrorChange={onIpNameErrorChange}
+        title="IP Name"
+        label="Enter IP Name"
       />
 
       <Box className="ipchart__details">

@@ -90,6 +90,8 @@ namespace PanoramaBackend.Controllers
             var host = _sessionCache.Host;
             var apiKey = _sessionCache.BearerToken;
 
+            var lookupIp = NormalizeLookupIp(request.Ip);
+
             var cachedDevices = _sessionCache
                 .GetCachedDevices()
                 .Where(d => d.Connected)
@@ -107,7 +109,7 @@ namespace PanoramaBackend.Controllers
                 await semaphore.WaitAsync();
                 try
                 {
-                    return await TryResolveOnDeviceAsync(host, apiKey, device, request.Ip);
+                    return await TryResolveOnDeviceAsync(host, apiKey, device, lookupIp);
                 }
                 catch
                 {
@@ -241,6 +243,22 @@ namespace PanoramaBackend.Controllers
                 (string?)result.Element("egress-interface");
 
             return string.IsNullOrWhiteSpace(iface) ? null : iface;
+        }
+
+        private static string NormalizeLookupIp(string value)
+        {
+            var trimmed = value.Trim();
+
+            if (trimmed.Contains("/"))
+            {
+                var parts = trimmed.Split('/', 2, StringSplitOptions.RemoveEmptyEntries);
+                if (parts.Length > 0)
+                {
+                    return parts[0].Trim();
+                }
+            }
+
+            return trimmed;
         }
 
         private static bool IsSkippedZone(string zone)

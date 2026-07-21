@@ -69,6 +69,11 @@ export default function IP2Zone({
     "No data collected yet."
   );
 
+  const [sourceIpError, setSourceIpError] = useState("");
+  const [sourceNameError, setSourceNameError] = useState("");
+  const [destIpError, setDestIpError] = useState("");
+  const [destNameError, setDestNameError] = useState("");
+
   const loadCacheStatus = async () => {
     try {
       const status: PanoramaCacheStatus = await getPanoramaCacheStatus();
@@ -192,6 +197,19 @@ export default function IP2Zone({
     }
   };
 
+  const lookupDisabled =
+    lookupLoading ||
+    cacheLoading ||
+    !hasCache ||
+    !sourceIp ||
+    !sourceIpName ||
+    !destIp ||
+    !destIpName ||
+    sourceIpError !== "" ||
+    sourceNameError !== "" ||
+    destIpError !== "" ||
+    destNameError !== "";
+
   return (
     <div className="panorama-page">
       <div className="panorama-shell">
@@ -232,6 +250,8 @@ export default function IP2Zone({
             <IPChart
               onIpChange={onSourceIpChange}
               onIpNameChange={onSourceIpNameChange}
+              onIpErrorChange={setSourceIpError}
+              onIpNameErrorChange={setSourceNameError}
               IPAddress={sourceIp}
               IPName={sourceIpName}
               ChartTitle="Source IP:"
@@ -246,6 +266,8 @@ export default function IP2Zone({
             <IPChart
               onIpChange={onDestIpChange}
               onIpNameChange={onDestIpNameChange}
+              onIpErrorChange={setDestIpError}
+              onIpNameErrorChange={setDestNameError}
               IPAddress={destIp}
               IPName={destIpName}
               ChartTitle="Destination IP:"
@@ -261,7 +283,7 @@ export default function IP2Zone({
           <Button
             variant="contained"
             onClick={handleLookup}
-            disabled={lookupLoading || cacheLoading || !hasCache}
+            disabled={lookupDisabled}
             className="panorama-lookup-btn"
           >
             {lookupLoading ? "Looking up..." : "Lookup Zones"}
