@@ -4,11 +4,10 @@ import TextField from "@mui/material/TextField";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
+import Switch from "@mui/material/Switch";
+import FormControlLabel from "@mui/material/FormControlLabel";
 import type { SelectChangeEvent } from "@mui/material/Select";
 import FormControl from "@mui/material/FormControl";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
 import "../styles/pages/CreateRule.css";
 import "../styles/components/IP2Zone.css";
 import "../styles/components/LogProfileStartEnd.css";
@@ -37,13 +36,40 @@ import { PanoramaPreRuleFieldsAction } from '../features/IPanoramaPreRuleFields.
 import { useAppDispatch, useAppSelector } from '../hook';
 import { createPanoramaPreRule } from "../services/PanoramaCreateRule";
 
+
 export default function CreateARule() {
 
+  //Redux Variables: -------------------------------------------------------------------------------------------------------
   const dispatch = useAppDispatch();
   const panorama = useAppSelector((state) => state.PanoramaPreRuleFields.TrackerPanorama);
 
-  const [trafficMode, setTrafficMode] = useState("automatic");
+  //Rule Name and Description States: -------------------------------------------------------------------------------------
+  const [ruleNameMode, setRuleNameMode] = useState<"automatic" | "manual">("automatic");
+  const [descriptionMode, setDescriptionMode] = useState<"automatic" | "manual">("automatic");
 
+  const isRuleNameReady = Boolean(
+  panorama.From &&
+  panorama.SourceName &&
+  panorama.DestinationName &&
+  panorama.TicketNumber
+);
+
+const isDescriptionReady = Boolean(
+  panorama.TicketNumber &&
+  panorama.Requester &&
+  panorama.SourceName &&
+  panorama.DestinationName &&
+  panorama.Application &&
+  panorama.Service
+);
+
+const ruleNameDisplayValue =
+  ruleNameMode === "automatic" && !isRuleNameReady ? "" : panorama.RuleName;
+
+const descriptionDisplayValue =
+  descriptionMode === "automatic" && !isDescriptionReady ? "" : panorama.Description;
+
+//Form States: --------------------------------------------------------------------------------------------------------------
   const [deviceGroups, setDeviceGroups] = useState<string[]>([]);
 
   const [tags, setTags] = useState<PanoramaTagEntry[]>([]);
@@ -266,19 +292,37 @@ const selectedGroupTag = tags.find((tag) => tag.name === panorama.GroupTag) ?? n
 
 //Automatically Generated Fields: -------------------------------------------------------------------------------------
 const generatedRuleName = [panorama.From, panorama.SourceName, "to", panorama.DestinationName, panorama.TicketNumber].filter(Boolean).join("-");
-const generatedDescription = ["Ticket:",panorama.TicketNumber,"Requestor:",panorama.Requester,"Purpose: To allow",panorama.SourceName,"to connect to",panorama.DestinationName,"using",panorama.Application,"on",panorama.Service,].filter(Boolean).join(" ");
+const generatedDescription = ["Ticket:",panorama.TicketNumber,"| Requestor:",panorama.Requester,"| Purpose: To allow",panorama.SourceName,"to connect to",panorama.DestinationName,"using",panorama.Application,"on",panorama.Service,].filter(Boolean).join(" ");
 
 useEffect(() => {
-  if (trafficMode !== "automatic") return;
+  if (ruleNameMode !== "automatic") return;
+
+  if (!isRuleNameReady) {
+    if (panorama.RuleName !== "") {
+      dispatch(PanoramaPreRuleFieldsAction.SetPanoramaPreRuleField({ field: "RuleName", value: "" }));
+    }
+    return;
+  }
 
   if (panorama.RuleName !== generatedRuleName) {
     dispatch(PanoramaPreRuleFieldsAction.SetPanoramaPreRuleField({ field: "RuleName", value: generatedRuleName }));
+  }
+}, [ruleNameMode, isRuleNameReady, generatedRuleName, panorama.RuleName, dispatch]);
+
+useEffect(() => {
+  if (descriptionMode !== "automatic") return;
+
+  if (!isDescriptionReady) {
+    if (panorama.Description !== "") {
+      dispatch(PanoramaPreRuleFieldsAction.SetPanoramaPreRuleField({ field: "Description", value: "" }));
+    }
+    return;
   }
 
   if (panorama.Description !== generatedDescription) {
     dispatch(PanoramaPreRuleFieldsAction.SetPanoramaPreRuleField({ field: "Description", value: generatedDescription }));
   }
-}, [trafficMode, generatedRuleName, generatedDescription, panorama.RuleName, panorama.Description, dispatch]);
+}, [descriptionMode, isDescriptionReady, generatedDescription, panorama.Description, dispatch]);
 
 //All these pertain to submitting the form to the backend + button functionality: ---------------------------------------------------
 const createPreRulePayload = {
@@ -336,65 +380,53 @@ const handleSubmitPreRule = async () => {
       </header>
 
       <div className="create-rule__body">
-        <div className="create-rule__section">
-          <div className="create-rule__section-header">
-            <p className="IPSubtitle">
-              How do you want to define the traffic for this rule?
-            </p>
-          </div>
-
-          <Box className="create-rule__radio-wrap">
-            <FormControl fullWidth>
-              <RadioGroup
-                aria-labelledby="traffic-mode-radio-group"
-                name="traffic-mode-radio-group"
-                value={trafficMode}
-                onChange={(e) => setTrafficMode(e.target.value)}
-                className="AnswerBoxes"
-              >
-                <FormControlLabel
-                  className="RadioButtons"
-                  value="automatic"
-                  control={<Radio />}
-                  label="Automatic"
-                />
-                <FormControlLabel
-                  className="RadioButtons"
-                  value="manual"
-                  control={<Radio />}
-                  label="Manual"
-                />
-              </RadioGroup>
-            </FormControl>
-          </Box>
-        </div>
-
         <TicketNumber
           value={panorama.TicketNumber}
           onChange={(value) => dispatch(PanoramaPreRuleFieldsAction.SetPanoramaPreRuleFields({...panorama, TicketNumber: value,}))}
         />
 
-        <NameField
-          value={panorama.Requester}
-          onChange={(value) => dispatch(PanoramaPreRuleFieldsAction.SetPanoramaPreRuleFields({...panorama, Requester: value,}))}
-          title="Requester"
-          label="Enter Requester Name"
-        />
-
         <div className="create-rule__section">
           <div className="create-rule__section-header">
-            <p className="IPSubtitle">Rule Name</p>
+            <p className="IPSubtitle">Requester</p>
           </div>
 
           <Box className="create-rule__input-wrap">
             <TextField
               fullWidth
-              value={panorama.RuleName}
-              onChange={(e) => dispatch(PanoramaPreRuleFieldsAction.SetPanoramaPreRuleFields({ ...panorama, RuleName: e.target.value }))}
+              value={panorama.Requester}
+              onChange={(e) => dispatch(PanoramaPreRuleFieldsAction.SetPanoramaPreRuleField({ field: "Requester", value: e.target.value }))}
               className="create-rule__input"
-              label="Enter Rule Name"
+              label="Enter Requester Name"
               variant="outlined"
-              disabled={trafficMode !== "manual"}
+            />
+          </Box>
+        </div>
+
+        <div className="create-rule__section">
+          <div className="create-rule__section-header">
+            <p className="IPSubtitle">Rule Name</p>
+            <FormControlLabel
+              className="create-rule__mode-toggle"
+              control={
+                <Switch
+                  className="create-rule__mode-switch"
+                  checked={ruleNameMode === "manual"}
+                  onChange={(e) => setRuleNameMode(e.target.checked ? "manual" : "automatic")}
+                />
+              }
+              label={ruleNameMode === "manual" ? "Manual" : "Automatic"}
+            />
+          </div>
+
+          <Box className="create-rule__input-wrap">
+            <TextField
+              fullWidth
+              value={ruleNameDisplayValue}
+              onChange={(e) => dispatch(PanoramaPreRuleFieldsAction.SetPanoramaPreRuleField({ field: "RuleName", value: e.target.value.replace(/\s+/g, "") }))}
+              className="create-rule__input"
+              label={ruleNameMode === "automatic" && !isRuleNameReady ? "Generating..." : "Enter Rule Name"}
+              variant="outlined"
+              disabled={ruleNameMode === "automatic"}
             />
           </Box>
         </div>
@@ -402,6 +434,17 @@ const handleSubmitPreRule = async () => {
         <div className="create-rule__section">
           <div className="create-rule__section-header">
             <p className="IPSubtitle">Description</p>
+            <FormControlLabel
+              className="create-rule__mode-toggle"
+              control={
+                <Switch
+                  className="create-rule__mode-switch"
+                  checked={descriptionMode === "manual"}
+                  onChange={(e) => setDescriptionMode(e.target.checked ? "manual" : "automatic")}
+                />
+              }
+              label={descriptionMode === "manual" ? "Manual" : "Automatic"}
+            />
           </div>
 
           <Box className="create-rule__input-wrap">
@@ -409,18 +452,16 @@ const handleSubmitPreRule = async () => {
               fullWidth
               multiline
               minRows={3}
-              value={panorama.Description}
-              onChange={(e) => dispatch(PanoramaPreRuleFieldsAction.SetPanoramaPreRuleFields({ ...panorama, Description: e.target.value }))}
+              value={descriptionDisplayValue}
+              onChange={(e) => dispatch(PanoramaPreRuleFieldsAction.SetPanoramaPreRuleField({ field: "Description", value: e.target.value }))}
               className="create-rule__input"
-              label="Enter Description"
+              label={descriptionMode === "automatic" && !isDescriptionReady ? "Generating..." : "Enter Description"}
               variant="outlined"
-              disabled={trafficMode !== "manual"}
+              disabled={descriptionMode === "automatic"}
             />
           </Box>
         </div>
 
-        {trafficMode === "automatic" && (
-          <>
             <div className="IP2ZoneWrapper">
               <IP2Zone
                 sourceIp={panorama.Source}
@@ -608,17 +649,20 @@ const handleSubmitPreRule = async () => {
                 </div>
               </Box>
             </div>
-              <div className="create-rule__section">
-                <Box className="create-rule__input-wrap">
-                  <button type="button" onClick={handleSubmitPreRule} disabled={submitLoading}>
-                    {submitLoading ? "Submitting..." : "Submit Pre-Rule"}
-                  </button>
-                </Box>
-                {submitMessage && <p>{submitMessage}</p>}
+            <div className="create-rule__section">
+              <Box className="create-rule__input-wrap">
+                <button
+                  type="button"
+                  onClick={handleSubmitPreRule}
+                  disabled={submitLoading}
+                  className="create-rule__button"
+                >
+                  {submitLoading ? "Submitting..." : "Submit Pre-Rule"}
+                </button>
+              </Box>
+              {submitMessage && <p>{submitMessage}</p>}
             </div>
-          </>
-        )}
-      </div>
+        </div>
     </div>
   );
 }

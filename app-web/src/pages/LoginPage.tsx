@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginToPanorama } from "../services/PanoramaLoginClient";
+import panoramalogo from "../components/images/panoramalogo.png";
 import "../styles/pages/LoginPage.css";
 
 export default function LoginPage() {
@@ -43,10 +44,13 @@ export default function LoginPage() {
   return (
 
     <div className="appTitle">
-      <h1 className="AppTitle">Panorama IP Zone Mapper</h1>
       
       <div className="login-page">
-        <h1 className="login-page__title">Login</h1>
+        <img
+          className="login-page__logo"
+          src={panoramalogo}
+          alt="Panorama logo"
+        />
 
         <form className="login-page__form" onSubmit={handleSubmit}>
           {/* Host field */}

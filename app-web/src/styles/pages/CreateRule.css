@@ -183,3 +183,90 @@
 .create-rule__multi-select .MuiInputLabel-root.Mui-focused {
   color: var(--accent);
 }
+
+.create-rule__section-header .create-rule__mode-toggle {
+  margin-left: 0px !important;
+  margin-right: 0px !important;
+}
+
+.create-rule__mode-toggle .MuiFormControlLabel-label {
+  font-size: 0.92rem;
+  color: #70819b;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+}
+
+.create-rule__mode-switch .MuiSwitch-switchBase.Mui-checked {
+  color: #9aa6b2;
+}
+
+.create-rule__mode-switch .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track {
+  background-color: #70819b;
+  opacity: 1;
+}
+
+.create-rule__mode-switch .MuiSwitch-track {
+  background-color: #70819b;
+  opacity: 1;
+}
+
+.create-rule__mode-switch .MuiSwitch-thumb {
+  box-shadow: none;
+}
+
+.create-rule__mode-switch .MuiSwitch-switchBase {
+  color: #9aa6b2 !important;
+}
+
+.create-rule__mode-switch .MuiSwitch-track {
+  background-color: #c7d0d9 !important;
+  opacity: 1 !important;
+}
+
+.create-rule__mode-switch .MuiSwitch-switchBase.Mui-checked {
+  color: #9aa6b2 !important;
+}
+
+.create-rule__mode-switch .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track {
+  background-color: #c7d0d9 !important;
+  opacity: 1 !important;
+}
+
+.create-rule__button {
+  min-width: 300px;
+  min-height: 52px;
+  padding: 0 20px;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #2563EB 0%, #2563EB 100%);
+  color: #ffffff;
+  font-size: 0.98rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition:
+    transform 0.16s ease,
+    box-shadow 0.16s ease,
+    opacity 0.16s ease;
+  box-shadow: 0 12px 24px rgba(37, 99, 235, 0.22);
+}
+
+.create-rule__input-wrap {
+  display: flex;
+  justify-content: center;
+}
+
+.create-rule__button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 16px 28px rgba(37, 99, 235, 0.28);
+}
+
+.create-rule__button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.create-rule__button:disabled {
+  opacity: 0.7;
+  cursor: default;
+  box-shadow: none;
+}
