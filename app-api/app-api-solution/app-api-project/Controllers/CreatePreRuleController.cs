@@ -7,6 +7,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using PanoramaBackend.Services;
 
 namespace PanoramaBackend.Controllers
@@ -213,12 +214,17 @@ namespace PanoramaBackend.Controllers
 
             if (!response.IsSuccessStatusCode)
             {
+                if ((int)response.StatusCode == 403)
+                {
+                    return StatusCode(StatusCodes.Status403Forbidden, new
+                    {
+                        message = "Unauthorized"
+                    });
+                }
+
                 return StatusCode((int)response.StatusCode, new
                 {
-                    message = "Panorama pre-rule creation failed.",
-                    panoramaStatusCode = (int)response.StatusCode,
-                    panoramaResponse = responseBody,
-                    endpoint
+                    message = "Panorama pre-rule creation failed."
                 });
             }
 
@@ -234,7 +240,7 @@ namespace PanoramaBackend.Controllers
 
             return Ok(new
             {
-                message = "Panorama pre-rule created successfully.",
+                message = "Panorama Firewall Pre-Rule Created Successfully",
                 deviceGroup = request.DeviceGroup,
                 ruleName = request.RuleName,
                 panoramaResponse = parsedPanoramaResponse

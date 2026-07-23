@@ -34,11 +34,13 @@ import TicketNumber from "../components/TicketNumber";
 import { PanoramaPreRuleFieldsAction } from "../features/IPanoramaPreRuleFields.feature.ts";
 import { useAppDispatch, useAppSelector } from "../hook";
 import { createPanoramaPreRule } from "../services/PanoramaCreateRule";
+import { isPanoramaPreRuleValid } from "../components/Validation";
 
 export default function CreateARule() {
   // Redux Variables
   const dispatch = useAppDispatch();
   const panorama = useAppSelector((state) => state.PanoramaPreRuleFields.TrackerPanorama);
+  const isSubmitEnabled = isPanoramaPreRuleValid(panorama);
 
   // Rule Name and Description States
   const [ruleNameMode, setRuleNameMode] = useState<"automatic" | "manual">("automatic");
@@ -892,8 +894,12 @@ export default function CreateARule() {
             <button
               type="button"
               onClick={handleSubmitPreRule}
-              disabled={submitLoading}
-              className="create-rule__button"
+              disabled={submitLoading || !isSubmitEnabled}
+              className={`create-rule__button ${
+                isSubmitEnabled && !submitLoading
+                  ? "create-rule__button--enabled"
+                  : "create-rule__button--disabled"
+              }`}
             >
               {submitLoading ? "Submitting..." : "Submit Pre-Rule"}
             </button>

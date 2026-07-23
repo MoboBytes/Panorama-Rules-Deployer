@@ -214,11 +214,6 @@ export default function IP2Zone({
     <div className="panorama-page">
       <div className="panorama-shell">
         <header className="panorama-hero">
-          <h1 className="panorama-hero__title">Panorama IP Zone Mapper</h1>
-          <p className="panorama-hero__subtitle">
-            Map source and destination IP addresses to firewall zones using
-            Panorama metadata.
-          </p>
         </header>
 
         <section className="panorama-status-card">
