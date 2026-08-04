@@ -14,6 +14,9 @@
 - nvm use 20 //Switch to a specific installed version 
 - node -v //Check current Node version. We want Javascript [v20.19.4]
 
+**Installing Git**
+- Go install .exe for git at their website (This is for version control) "https://git-scm.com/"
+
 **Git Clone Repository in a folder**
 - git clone https://github.com/MoboBytes/Panorama-Rules-Deployer.git
 
