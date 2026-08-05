@@ -1,0 +1,30 @@
+So before I change the rule on my back-end. I want to create a rule on postman to make sure it works and appears on panorama. Here's  the instructions on the form: Create a security pre-rule
+Create a security pre-rule.
+
+query Parameters
+name
+required
+string
+The name of the entry
+
+location
+required
+string
+Enum: "shared" "device-group"
+The location of the entry
+
+device-group	
+string
+The name of the Panorama device group to which you have assigned the firewalls, when location is device-group
+
+input-format	
+string
+Default: "json"
+Enum: "json" "xml"
+Specify the input format to be JSON or XML. It is equivalent to set Content-Type header to application/json or application/xml. If both input-format and Content-Type header are presented, the value of input-format will override the header.
+
+output-format	
+string
+Default: "json"
+Enum: "json" "xml"
+Specify the output format to be JSON or XML. It is equivalent to set Accept header to application/json or application/xml. If both output-format and Accept header are presented, the value of output-format will override the header. and here's a picture of my postman. Where do I put the json? I'm a bit confused. 

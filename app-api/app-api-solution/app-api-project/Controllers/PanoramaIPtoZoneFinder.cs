@@ -90,6 +90,8 @@ namespace PanoramaBackend.Controllers
             var host = _sessionCache.Host;
             var apiKey = _sessionCache.BearerToken;
 
+            var lookupIp = NormalizeLookupIp(request.Ip);
+
             var cachedDevices = _sessionCache
                 .GetCachedDevices()
                 .Where(d => d.Connected)
@@ -107,7 +109,7 @@ namespace PanoramaBackend.Controllers
                 await semaphore.WaitAsync();
                 try
                 {
-                    return await TryResolveOnDeviceAsync(host, apiKey, device, request.Ip);
+                    return await TryResolveOnDeviceAsync(host, apiKey, device, lookupIp);
                 }
                 catch
                 {
@@ -126,7 +128,16 @@ namespace PanoramaBackend.Controllers
 
             if (!results.Any())
             {
-                return NotFound($"No non-generic zone found for IP {request.Ip}");
+                return Ok(new ZoneByIpResult
+                {
+                    DeviceSerial = "Not Applicable",
+                    DeviceHostname = "Not Applicable",
+                    DeviceIpAddress = "Not Applicable",
+                    DeviceGroup = "Not Applicable",
+                    VirtualRouter = "Not Applicable",
+                    EgressInterface = "Not Applicable",
+                    Zone = "inside"
+                });
             }
 
             // Any returned result is already guaranteed to be valid
@@ -234,12 +245,31 @@ namespace PanoramaBackend.Controllers
             return string.IsNullOrWhiteSpace(iface) ? null : iface;
         }
 
+        private static string NormalizeLookupIp(string value)
+        {
+            var trimmed = value.Trim();
+
+            if (trimmed.Contains("/"))
+            {
+                var parts = trimmed.Split('/', 2, StringSplitOptions.RemoveEmptyEntries);
+                if (parts.Length > 0)
+                {
+                    return parts[0].Trim();
+                }
+            }
+
+            return trimmed;
+        }
+
         private static bool IsSkippedZone(string zone)
         {
-            return string.Equals(zone, "inside", StringComparison.OrdinalIgnoreCase)
-                || string.Equals(zone, "outside", StringComparison.OrdinalIgnoreCase)
-                || string.Equals(zone, "extranet-firewall", StringComparison.OrdinalIgnoreCase)
-                || string.Equals(zone, "internet", StringComparison.OrdinalIgnoreCase);
+            return
+                string.Equals(zone, "inside", StringComparison.OrdinalIgnoreCase)
+            || string.Equals(zone, "extranet-firewall", StringComparison.OrdinalIgnoreCase)
+            || string.Equals(zone, "abs", StringComparison.OrdinalIgnoreCase);
+            //|| string.Equals(zone, "outside", StringComparison.OrdinalIgnoreCase)
+            //|| string.Equals(zone, "internet", StringComparison.OrdinalIgnoreCase);
+
         }
     }
 }

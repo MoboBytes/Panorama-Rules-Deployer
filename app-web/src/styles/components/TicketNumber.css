@@ -1,0 +1,75 @@
+.ticket-number {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ticket-number__header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.ticket-number__title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-main);
+  line-height: 1.2;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+}
+
+.ticket-number__input-wrap {
+  width: 100%;
+}
+
+.ticket-number__input {
+  width: 100%;
+}
+
+.ticket-number__input .MuiFormControl-root {
+  width: 100%;
+}
+
+.ticket-number__input .MuiInputBase-root,
+.ticket-number__input .MuiOutlinedInput-root {
+  border-radius: 14px;
+  background-color: #ffffff;
+  font-size: 0.95rem;
+}
+
+.ticket-number__input .MuiOutlinedInput-root:not(.MuiInputBase-multiline) {
+  min-height: 52px;
+}
+
+.ticket-number__input .MuiOutlinedInput-notchedOutline {
+  border-color: #d8e1ee;
+}
+
+.ticket-number__input
+  .MuiOutlinedInput-root:hover
+  .MuiOutlinedInput-notchedOutline {
+  border-color: #bfd0eb;
+}
+
+.ticket-number__input
+  .MuiOutlinedInput-root.Mui-focused
+  .MuiOutlinedInput-notchedOutline {
+  border-color: var(--accent);
+  border-width: 2px;
+}
+
+.ticket-number__input .MuiInputLabel-root {
+  color: #70819b;
+  font-size: 0.92rem;
+}
+
+.ticket-number__input .MuiInputLabel-root.Mui-focused {
+  color: var(--accent);
+}
+
+.ticket-number__asterisk {
+  color: #d32f2f;
+  font-weight: 700;
+}

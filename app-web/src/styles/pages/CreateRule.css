@@ -1,0 +1,278 @@
+.create-rule {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding-top: 20px;
+}
+
+.create-rule__body {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: min(900px, calc(100% - 60px));
+  margin: 0 auto 40px;
+}
+
+.create-rule__section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.create-rule__section-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.IPSubtitle {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-main);
+  line-height: 1.2;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+}
+
+.create-rule__input-wrap {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.create-rule__input-wrap--disabled {
+  opacity: 1;
+  filter: none;
+}
+
+/* Shared single-input styling */
+.create-rule__input {
+  width: 100%;
+}
+
+.create-rule__input .MuiFormControl-root {
+  width: 100%;
+}
+
+.create-rule__input .MuiInputBase-root,
+.create-rule__input .MuiOutlinedInput-root {
+  border-radius: 14px;
+  background-color: #ffffff;
+  font-size: 0.95rem;
+}
+
+.create-rule__input .MuiOutlinedInput-root:not(.MuiInputBase-multiline) {
+  min-height: 52px;
+}
+
+.create-rule__input .MuiOutlinedInput-notchedOutline {
+  border-color: #d8e1ee;
+}
+
+.create-rule__input .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: #bfd0eb;
+}
+
+.create-rule__input
+  .MuiOutlinedInput-root.Mui-focused
+  .MuiOutlinedInput-notchedOutline {
+  border-color: var(--accent);
+  border-width: 2px;
+}
+
+.create-rule__input .MuiInputLabel-root {
+  color: #70819b;
+  font-size: 0.92rem;
+}
+
+.create-rule__input .MuiInputLabel-root.Mui-focused {
+  color: var(--accent);
+}
+
+/* Keep disabled text fields and selects white */
+.create-rule__input .MuiInputBase-root.Mui-disabled,
+.create-rule__input .MuiOutlinedInput-root.Mui-disabled {
+  background-color: #ffffff !important;
+  opacity: 1;
+}
+
+.create-rule__input .MuiInputBase-input.Mui-disabled,
+.create-rule__input .MuiSelect-select.Mui-disabled {
+  -webkit-text-fill-color: rgba(0, 0, 0, 0.6);
+  color: rgba(0, 0, 0, 0.6);
+}
+
+/* Radio section */
+.create-rule__radio-wrap {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid #e1e8f3;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #ffffff 0%, #f9fbff 100%);
+}
+
+.AnswerBoxes {
+  margin-left: 0;
+  gap: 4px;
+}
+
+.RadioButtons {
+  margin: 0;
+}
+
+.RadioButtons .MuiFormControlLabel-label {
+  font-size: 0.95rem;
+  color: var(--text-main);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+}
+
+/* Embedded IP2Zone spacing */
+.IP2ZoneWrapper {
+  margin-top: 8px;
+}
+
+.create-rule__device-group {
+  margin-top: 8px;
+}
+
+/* Override embedded Panorama page layout */
+.create-rule .panorama-page {
+  min-height: auto;
+  padding: 0;
+}
+
+/* Multi-select / Tags */
+.create-rule__multi-select {
+  width: 100%;
+}
+
+.create-rule__multi-select .MuiFormControl-root {
+  width: 100%;
+}
+
+.create-rule__multi-select .MuiInputBase-root,
+.create-rule__multi-select .MuiOutlinedInput-root {
+  border-radius: 14px;
+  background-color: #ffffff;
+  font-size: 0.95rem;
+  min-height: 52px;
+}
+
+.create-rule__multi-select .MuiOutlinedInput-notchedOutline {
+  border-color: #d8e1ee;
+}
+
+.create-rule__multi-select
+  .MuiOutlinedInput-root:hover
+  .MuiOutlinedInput-notchedOutline {
+  border-color: #bfd0eb;
+}
+
+.create-rule__multi-select
+  .MuiOutlinedInput-root.Mui-focused
+  .MuiOutlinedInput-notchedOutline {
+  border-color: var(--accent);
+  border-width: 2px;
+}
+
+.create-rule__multi-select .MuiInputLabel-root {
+  color: #70819b;
+  font-size: 0.92rem;
+}
+
+.create-rule__multi-select .MuiInputLabel-root.Mui-focused {
+  color: var(--accent);
+}
+
+.create-rule__section-header .create-rule__mode-toggle {
+  margin-left: 0px !important;
+  margin-right: 0px !important;
+}
+
+.create-rule__mode-toggle .MuiFormControlLabel-label {
+  font-size: 0.92rem;
+  color: #70819b;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+}
+
+.create-rule__mode-switch .MuiSwitch-switchBase.Mui-checked {
+  color: #9aa6b2;
+}
+
+.create-rule__mode-switch .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track {
+  background-color: #70819b;
+  opacity: 1;
+}
+
+.create-rule__mode-switch .MuiSwitch-track {
+  background-color: #70819b;
+  opacity: 1;
+}
+
+.create-rule__mode-switch .MuiSwitch-thumb {
+  box-shadow: none;
+}
+
+.create-rule__mode-switch .MuiSwitch-switchBase {
+  color: #9aa6b2 !important;
+}
+
+.create-rule__mode-switch .MuiSwitch-track {
+  background-color: #c7d0d9 !important;
+  opacity: 1 !important;
+}
+
+.create-rule__mode-switch .MuiSwitch-switchBase.Mui-checked {
+  color: #9aa6b2 !important;
+}
+
+.create-rule__mode-switch .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track {
+  background-color: #c7d0d9 !important;
+  opacity: 1 !important;
+}
+
+.create-rule__button {
+  min-width: 300px;
+  min-height: 52px;
+  padding: 0 20px;
+  border: none;
+  border-radius: 14px;
+  color: #ffffff;
+  font-size: 0.98rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  transition:
+    transform 0.16s ease,
+    box-shadow 0.16s ease,
+    opacity 0.16s ease,
+    background 0.16s ease;
+}
+
+.create-rule__button--enabled {
+  background: linear-gradient(135deg, #2563eb 0%, #2563eb 100%);
+  cursor: pointer;
+  box-shadow: 0 12px 24px rgba(37, 99, 235, 0.22);
+}
+
+.create-rule__button--enabled:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 16px 28px rgba(37, 99, 235, 0.28);
+}
+
+.create-rule__button--enabled:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.create-rule__button--disabled {
+  background: linear-gradient(135deg, #9ca3af 0%, #9ca3af 100%);
+  cursor: not-allowed;
+  box-shadow: none;
+  opacity: 1;
+}
+
+.create-rule__button:disabled {
+  opacity: 1;
+}

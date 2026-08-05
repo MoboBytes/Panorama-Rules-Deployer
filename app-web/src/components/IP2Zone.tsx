@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Button, Typography } from "@mui/material";
 import { IPChart } from "./IPChart";
-import "../styles/IPChart.css";
-import "../styles/PanoramaPage.css";
+import "../styles/components/IPChart.css";
+import "../styles/components/IP2Zone.css";
 import {
   buildPanoramaCache,
   clearPanoramaCache,
@@ -14,27 +14,53 @@ import type {
   ZoneByIpResult,
 } from "../services/PanoramaZoneControllerClient";
 
-type ChartDetails = {
+export type ChartDetails = {
   firewallHostname: string;
   firewallSerialNumber: string;
   zone: string;
   firewallGroup: string;
 };
 
-const emptyDetails: ChartDetails = {
+type IP2ZoneProps = {
+  sourceIp: string;
+  onSourceIpChange: (value: string) => void;
+  sourceIpName: string;
+  onSourceIpNameChange: (value: string) => void;
+  sourceDetails: ChartDetails;
+  onSourceDetailsChange: (value: ChartDetails) => void;
+
+  destIp: string;
+  onDestIpChange: (value: string) => void;
+  destIpName: string;
+  onDestIpNameChange: (value: string) => void;
+  destDetails: ChartDetails;
+  onDestDetailsChange: (value: ChartDetails) => void;
+
+  onLookupComplete?: (deviceGroups: string[]) => void;
+};
+
+export const emptyDetails: ChartDetails = {
   firewallHostname: "",
   firewallSerialNumber: "",
   zone: "",
   firewallGroup: "",
 };
 
-export default function IP2Zone() {
-  const [sourceIp, setSourceIp] = useState("");
-  const [sourceDetails, setSourceDetails] = useState<ChartDetails>(emptyDetails);
-
-  const [destIp, setDestIp] = useState("");
-  const [destDetails, setDestDetails] = useState<ChartDetails>(emptyDetails);
-
+export default function IP2Zone({
+  sourceIp,
+  onSourceIpChange,
+  sourceIpName,
+  onSourceIpNameChange,
+  sourceDetails,
+  onSourceDetailsChange,
+  destIp,
+  onDestIpChange,
+  destIpName,
+  onDestIpNameChange,
+  destDetails,
+  onDestDetailsChange,
+  onLookupComplete,
+}: IP2ZoneProps) {
   const [lookupLoading, setLookupLoading] = useState(false);
   const [cacheLoading, setCacheLoading] = useState(false);
 
@@ -42,6 +68,11 @@ export default function IP2Zone() {
   const [cacheStatusMessage, setCacheStatusMessage] = useState(
     "No data collected yet."
   );
+
+  const [sourceIpError, setSourceIpError] = useState("");
+  const [sourceNameError, setSourceNameError] = useState("");
+  const [destIpError, setDestIpError] = useState("");
+  const [destNameError, setDestNameError] = useState("");
 
   const loadCacheStatus = async () => {
     try {
@@ -117,21 +148,26 @@ export default function IP2Zone() {
     setLookupLoading(true);
 
     try {
-      setSourceDetails(emptyDetails);
-      setDestDetails(emptyDetails);
+      onSourceDetailsChange(emptyDetails);
+      onDestDetailsChange(emptyDetails);
+      onLookupComplete?.([]);
+
+      let resolvedSourceGroup = "";
+      let resolvedDestGroup = "";
 
       const sIp = sourceIp.trim();
       if (sIp) {
         try {
           const result: ZoneByIpResult = await getZoneByIp(sIp);
-          setSourceDetails({
+          resolvedSourceGroup = result.deviceGroup;
+          onSourceDetailsChange({
             firewallHostname: result.deviceHostname,
             firewallSerialNumber: result.deviceSerial,
             zone: result.zone,
             firewallGroup: result.deviceGroup,
           });
         } catch {
-          setSourceDetails(emptyDetails);
+          onSourceDetailsChange(emptyDetails);
         }
       }
 
@@ -139,31 +175,45 @@ export default function IP2Zone() {
       if (dIp) {
         try {
           const result: ZoneByIpResult = await getZoneByIp(dIp);
-          setDestDetails({
+          resolvedDestGroup = result.deviceGroup;
+          onDestDetailsChange({
             firewallHostname: result.deviceHostname,
             firewallSerialNumber: result.deviceSerial,
             zone: result.zone,
             firewallGroup: result.deviceGroup,
           });
         } catch {
-          setDestDetails(emptyDetails);
+          onDestDetailsChange(emptyDetails);
         }
       }
+
+      const groups = Array.from(
+        new Set([resolvedSourceGroup, resolvedDestGroup].filter(Boolean))
+      );
+
+      onLookupComplete?.(groups);
     } finally {
       setLookupLoading(false);
     }
   };
 
+  const lookupDisabled =
+    lookupLoading ||
+    cacheLoading ||
+    !hasCache ||
+    !sourceIp ||
+    !sourceIpName ||
+    !destIp ||
+    !destIpName ||
+    sourceIpError !== "" ||
+    sourceNameError !== "" ||
+    destIpError !== "" ||
+    destNameError !== "";
+
   return (
     <div className="panorama-page">
       <div className="panorama-shell">
         <header className="panorama-hero">
-          <p className="panorama-hero__eyebrow">Network Discovery</p>
-          <h1 className="panorama-hero__title">Panorama IP Zone Mapper</h1>
-          <p className="panorama-hero__subtitle">
-            Map source and destination IP addresses to firewall zones using
-            Panorama metadata.
-          </p>
         </header>
 
         <section className="panorama-status-card">
@@ -192,8 +242,12 @@ export default function IP2Zone() {
         <section className="panorama-chart-grid">
           <div className="panorama-chart-card">
             <IPChart
-              onIpChange={setSourceIp}
+              onIpChange={onSourceIpChange}
+              onIpNameChange={onSourceIpNameChange}
+              onIpErrorChange={setSourceIpError}
+              onIpNameErrorChange={setSourceNameError}
               IPAddress={sourceIp}
+              IPName={sourceIpName}
               ChartTitle="Source IP:"
               firewallHostname={sourceDetails.firewallHostname}
               firewallSerialNumber={sourceDetails.firewallSerialNumber}
@@ -204,8 +258,12 @@ export default function IP2Zone() {
 
           <div className="panorama-chart-card">
             <IPChart
-              onIpChange={setDestIp}
+              onIpChange={onDestIpChange}
+              onIpNameChange={onDestIpNameChange}
+              onIpErrorChange={setDestIpError}
+              onIpNameErrorChange={setDestNameError}
               IPAddress={destIp}
+              IPName={destIpName}
               ChartTitle="Destination IP:"
               firewallHostname={destDetails.firewallHostname}
               firewallSerialNumber={destDetails.firewallSerialNumber}
@@ -219,7 +277,7 @@ export default function IP2Zone() {
           <Button
             variant="contained"
             onClick={handleLookup}
-            disabled={lookupLoading || cacheLoading || !hasCache}
+            disabled={lookupDisabled}
             className="panorama-lookup-btn"
           >
             {lookupLoading ? "Looking up..." : "Lookup Zones"}

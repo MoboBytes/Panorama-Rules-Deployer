@@ -1,0 +1,71 @@
+.log-profile-start-end {
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+  width: 100%;
+}
+
+.log-profile-start-end__search {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.log-profile-start-end__position {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  font-size: 1.1rem; 
+  font-weight: 700;
+  line-height: 1.2; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; 
+}
+
+.log_profile-helper_subtitle {
+  margin: 0 0 3px 0px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-main);
+  line-height: 1.2;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+/* Search field */
+.log-profile-start-end .MuiFormControl-root {
+  width: 100%;
+}
+
+.log-profile-start-end .MuiInputBase-root,
+.log-profile-start-end .MuiOutlinedInput-root {
+  border-radius: 14px;
+  background-color: #ffffff;
+  font-size: 0.95rem;
+  min-height: 52px;
+}
+
+.log-profile-start-end .MuiOutlinedInput-notchedOutline {
+  border-color: #d8e1ee;
+}
+
+.log-profile-start-end
+  .MuiOutlinedInput-root:hover
+  .MuiOutlinedInput-notchedOutline {
+  border-color: #bfd0eb;
+}
+
+.log-profile-start-end
+  .MuiOutlinedInput-root.Mui-focused
+  .MuiOutlinedInput-notchedOutline {
+  border-color: var(--accent);
+  border-width: 2px;
+}
+
+.log-profile-start-end .MuiInputLabel-root {
+  color: #70819b;
+  font-size: 0.92rem;
+}
+
+.log-profile-start-end .MuiInputLabel-root.Mui-focused {
+  color: var(--accent);
+}

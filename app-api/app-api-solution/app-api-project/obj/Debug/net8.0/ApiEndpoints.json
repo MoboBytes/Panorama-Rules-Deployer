@@ -1,5 +1,95 @@
 [
   {
+    "ContainingType": "PanoramaBackend.Controllers.CreateApplicationsController",
+    "Method": "GetAllApplications",
+    "RelativePath": "api/CreateApplications/all",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "PanoramaBackend.Controllers.CreateApplicationsController\u002BGetApplicationsRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "PanoramaBackend.Controllers.CreateLogForwardingProfilesController",
+    "Method": "GetAllLogForwardingProfiles",
+    "RelativePath": "api/CreateLogForwardingProfiles/all",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "PanoramaBackend.Controllers.CreateLogForwardingProfilesController\u002BGetLogForwardingProfilesRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "PanoramaBackend.Controllers.CreatePreRuleController",
+    "Method": "CreatePreRule",
+    "RelativePath": "api/CreatePreRule",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "PanoramaBackend.Controllers.CreatePreRuleController\u002BCreatePreRuleRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "PanoramaBackend.Controllers.CreateProfileSettingsController",
+    "Method": "GetAllProfileSettings",
+    "RelativePath": "api/CreateProfileSettings/all",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "PanoramaBackend.Controllers.CreateServicesController",
+    "Method": "GetAllServices",
+    "RelativePath": "api/CreateServices/all",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "PanoramaBackend.Controllers.CreateServicesController\u002BGetServicesRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "PanoramaBackend.Controllers.CreateTagsController",
+    "Method": "GetAllTags",
+    "RelativePath": "api/CreateTags/all",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "PanoramaBackend.Controllers.CreateTagsController\u002BGetTagsRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "PanoramaBackend.Controllers.PanoramaCacheController",
     "Method": "BuildCache",
     "RelativePath": "api/PanoramaCache/build",
